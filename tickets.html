@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Listado de tickets de incidentes registrados en el sistema Help Desk del Data Center">
+  <meta name="author" content="Carlos Andrés Mejía Torres">
+  <title>Lista de Tickets | Help Desk – Data Center UTM</title>
+</head>
+<body>
+
+  <header>
+    <h1>Sistema de Gestión de Incidentes</h1>
+    <p><strong>Help Desk – Infraestructura de Data Center</strong></p>
+    <p>Universidad Técnica de Manabí – Facultad de Ciencias Informáticas</p>
+    <nav aria-label="Navegación principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="reportar.html">Reportar Incidente</a></li>
+        <li><a href="tickets.html" aria-current="page">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section aria-labelledby="tickets-titulo">
+      <h2 id="tickets-titulo">Listado de Tickets de Incidentes</h2>
+      <p>
+        A continuación se presenta el registro de todos los incidentes reportados en el sistema.
+        Los tickets se ordenan del más reciente al más antiguo. Para reportar un nuevo incidente,
+        acceda al <a href="reportar.html">formulario de reporte</a>.
+      </p>
+
+      <section aria-labelledby="filtros-titulo">
+        <h3 id="filtros-titulo">Filtrar Tickets</h3>
+        <form action="#" method="get">
+          <fieldset>
+            <legend>Opciones de filtrado</legend>
+
+            <p>
+              <label for="filtro-estado">Estado:</label>
+              <select id="filtro-estado" name="estado">
+                <option value="">Todos los estados</option>
+                <option value="abierto">Abierto</option>
+                <option value="en-proceso">En Proceso</option>
+                <option value="resuelto">Resuelto</option>
+                <option value="cerrado">Cerrado</option>
+              </select>
+            </p>
+
+            <p>
+              <label for="filtro-categoria">Categoría:</label>
+              <select id="filtro-categoria" name="categoria">
+                <option value="">Todas las categorías</option>
+                <option value="hardware">Hardware</option>
+                <option value="red">Red</option>
+                <option value="software">Software</option>
+              </select>
+            </p>
+
+            <p>
+              <label for="filtro-prioridad">Prioridad:</label>
+              <select id="filtro-prioridad" name="prioridad">
+                <option value="">Todas las prioridades</option>
+                <option value="critica">Crítica</option>
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja">Baja</option>
+              </select>
+            </p>
+
+            <p>
+              <label for="filtro-busqueda">Buscar por palabra clave:</label>
+              <br>
+              <input
+                type="search"
+                id="filtro-busqueda"
+                name="busqueda"
+                placeholder="Ej. servidor, red, base de datos..."
+                maxlength="100"
+              >
+            </p>
+
+            <p>
+              <button type="submit">Aplicar filtros</button>
+              <button type="reset">Limpiar filtros</button>
+            </p>
+          </fieldset>
+        </form>
+      </section>
+
+      <section aria-labelledby="tabla-tickets-titulo">
+        <h3 id="tabla-tickets-titulo">Tickets Registrados</h3>
+
+        <table>
+          <caption>
+            Registro completo de tickets de incidentes – Help Desk Data Center
+            <br>
+            <small>Total de tickets: 10 | Última actualización: <time datetime="2026-05-25">25 de mayo de 2026</time></small>
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">N.° Ticket</th>
+              <th scope="col">Fecha de apertura</th>
+              <th scope="col">Título del incidente</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Prioridad</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Técnico asignado</th>
+              <th scope="col">Fecha resolución</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-001" aria-label="Ver detalle del ticket TK-001">TK-001</a>
+              </th>
+              <td><time datetime="2026-05-20T08:30">20/05/2026 08:30</time></td>
+              <td>Servidor de base de datos no responde en zona A</td>
+              <td>Software – Base de datos</td>
+              <td>Crítica</td>
+              <td>Resuelto</td>
+              <td>Ing. María López</td>
+              <td><time datetime="2026-05-20T11:15">20/05/2026 11:15</time></td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-002" aria-label="Ver detalle del ticket TK-002">TK-002</a>
+              </th>
+              <td><time datetime="2026-05-21T09:00">21/05/2026 09:00</time></td>
+              <td>Pérdida de conectividad en switch de distribución</td>
+              <td>Red – LAN</td>
+              <td>Alta</td>
+              <td>Resuelto</td>
+              <td>Ing. Pedro Suárez</td>
+              <td><time datetime="2026-05-21T12:45">21/05/2026 12:45</time></td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-003" aria-label="Ver detalle del ticket TK-003">TK-003</a>
+              </th>
+              <td><time datetime="2026-05-22T14:20">22/05/2026 14:20</time></td>
+              <td>Fallo en disco duro RAID del servidor SRV-FILE-02</td>
+              <td>Hardware – Servidor</td>
+              <td>Alta</td>
+              <td>En Proceso</td>
+              <td>Ing. Carlos Reyes</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-004" aria-label="Ver detalle del ticket TK-004">TK-004</a>
+              </th>
+              <td><time datetime="2026-05-22T16:05">22/05/2026 16:05</time></td>
+              <td>Sistema de correo institucional inaccesible</td>
+              <td>Software – Aplicación empresarial</td>
+              <td>Crítica</td>
+              <td>En Proceso</td>
+              <td>Ing. María López</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-005" aria-label="Ver detalle del ticket TK-005">TK-005</a>
+              </th>
+              <td><time datetime="2026-05-23T07:45">23/05/2026 07:45</time></td>
+              <td>Lentitud extrema en acceso a carpetas compartidas</td>
+              <td>Red – LAN</td>
+              <td>Media</td>
+              <td>En Proceso</td>
+              <td>Ing. Pedro Suárez</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-006" aria-label="Ver detalle del ticket TK-006">TK-006</a>
+              </th>
+              <td><time datetime="2026-05-23T10:30">23/05/2026 10:30</time></td>
+              <td>Error al iniciar sesión en sistema ERP</td>
+              <td>Software – Sistema Operativo</td>
+              <td>Alta</td>
+              <td>Abierto</td>
+              <td>Sin asignar</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-007" aria-label="Ver detalle del ticket TK-007">TK-007</a>
+              </th>
+              <td><time datetime="2026-05-24T08:00">24/05/2026 08:00</time></td>
+              <td>Fuente de poder del servidor SRV-APP-01 con fallo intermitente</td>
+              <td>Hardware – Servidor</td>
+              <td>Alta</td>
+              <td>Abierto</td>
+              <td>Sin asignar</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-008" aria-label="Ver detalle del ticket TK-008">TK-008</a>
+              </th>
+              <td><time datetime="2026-05-24T11:15">24/05/2026 11:15</time></td>
+              <td>VPN corporativa no permite conexión desde trabajo remoto</td>
+              <td>Red – VPN</td>
+              <td>Media</td>
+              <td>Abierto</td>
+              <td>Sin asignar</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-009" aria-label="Ver detalle del ticket TK-009">TK-009</a>
+              </th>
+              <td><time datetime="2026-05-25T07:30">25/05/2026 07:30</time></td>
+              <td>Impresora de red del laboratorio 3 sin conexión</td>
+              <td>Hardware – Periférico</td>
+              <td>Baja</td>
+              <td>Abierto</td>
+              <td>Sin asignar</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <a href="#detalle-TK-010" aria-label="Ver detalle del ticket TK-010">TK-010</a>
+              </th>
+              <td><time datetime="2026-05-25T09:00">25/05/2026 09:00</time></td>
+              <td>Actualización fallida del antivirus en equipos de administración</td>
+              <td>Software – Seguridad</td>
+              <td>Media</td>
+              <td>Abierto</td>
+              <td>Sin asignar</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+
+    <section aria-labelledby="detalles-titulo">
+      <h2 id="detalles-titulo">Detalle de Tickets</h2>
+
+      <article id="detalle-TK-001" aria-labelledby="titulo-TK-001">
+        <h3 id="titulo-TK-001">TK-001 – Servidor de base de datos no responde en zona A</h3>
+        <dl>
+          <dt>Número de ticket</dt>
+          <dd>TK-001</dd>
+          <dt>Fecha de apertura</dt>
+          <dd><time datetime="2026-05-20T08:30">20 de mayo de 2026, 08:30</time></dd>
+          <dt>Categoría</dt>
+          <dd>Software – Base de datos</dd>
+          <dt>Prioridad</dt>
+          <dd>Crítica</dd>
+          <dt>Estado actual</dt>
+          <dd>Resuelto</dd>
+          <dt>Solicitante</dt>
+          <dd>Administrador de Sistemas – Zona A</dd>
+          <dt>Técnico asignado</dt>
+          <dd>Ing. María López – Especialista en Bases de Datos</dd>
+          <dt>Descripción del problema</dt>
+          <dd>El servidor SRV-DB-01 dejó de responder consultas a las 08:25. Los servicios de MySQL y PostgreSQL no inician. El error en log indica corrupción de tablespace.</dd>
+          <dt>Solución aplicada</dt>
+          <dd>Se realizó recuperación de tablespace corrupto mediante respaldo de las 03:00 AM. Se reiniciaron los servicios de base de datos. Se validó integridad de datos con el administrador.</dd>
+          <dt>Fecha de resolución</dt>
+          <dd><time datetime="2026-05-20T11:15">20 de mayo de 2026, 11:15</time></dd>
+          <dt>Tiempo de resolución</dt>
+          <dd>2 horas 45 minutos</dd>
+        </dl>
+        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
+      </article>
+
+      <article id="detalle-TK-002" aria-labelledby="titulo-TK-002">
+        <h3 id="titulo-TK-002">TK-002 – Pérdida de conectividad en switch de distribución</h3>
+        <dl>
+          <dt>Número de ticket</dt>
+          <dd>TK-002</dd>
+          <dt>Fecha de apertura</dt>
+          <dd><time datetime="2026-05-21T09:00">21 de mayo de 2026, 09:00</time></dd>
+          <dt>Categoría</dt>
+          <dd>Red – LAN</dd>
+          <dt>Prioridad</dt>
+          <dd>Alta</dd>
+          <dt>Estado actual</dt>
+          <dd>Resuelto</dd>
+          <dt>Solicitante</dt>
+          <dd>Ing. Roberto Vera – Soporte Nivel 1</dd>
+          <dt>Técnico asignado</dt>
+          <dd>Ing. Pedro Suárez – Especialista en Redes</dd>
+          <dt>Descripción del problema</dt>
+          <dd>El switch de distribución SW-DIST-02 perdió conectividad con los switches de acceso en el piso 2, dejando sin red a 35 estaciones de trabajo.</dd>
+          <dt>Solución aplicada</dt>
+          <dd>Se identificó puerto SFP+ con fallo en módulo óptico. Se reemplazó el módulo y se restauraron las conexiones troncales. Se verificó la convergencia del protocolo STP.</dd>
+          <dt>Fecha de resolución</dt>
+          <dd><time datetime="2026-05-21T12:45">21 de mayo de 2026, 12:45</time></dd>
+          <dt>Tiempo de resolución</dt>
+          <dd>3 horas 45 minutos</dd>
+        </dl>
+        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
+      </article>
+
+      <article id="detalle-TK-003" aria-labelledby="titulo-TK-003">
+        <h3 id="titulo-TK-003">TK-003 – Fallo en disco duro RAID del servidor SRV-FILE-02</h3>
+        <dl>
+          <dt>Número de ticket</dt>
+          <dd>TK-003</dd>
+          <dt>Fecha de apertura</dt>
+          <dd><time datetime="2026-05-22T14:20">22 de mayo de 2026, 14:20</time></dd>
+          <dt>Categoría</dt>
+          <dd>Hardware – Servidor</dd>
+          <dt>Prioridad</dt>
+          <dd>Alta</dd>
+          <dt>Estado actual</dt>
+          <dd>En Proceso</dd>
+          <dt>Técnico asignado</dt>
+          <dd>Ing. Carlos Reyes – Especialista en Hardware</dd>
+          <dt>Descripción del problema</dt>
+          <dd>El servidor de archivos SRV-FILE-02 reporta degradación del arreglo RAID-5. Un disco en ranura 3 fue marcado como fallido por el controlador. Los datos están aún accesibles pero en modo degradado.</dd>
+          <dt>Avance actual</dt>
+          <dd>Se solicitó disco de reemplazo al proveedor. Se realizó respaldo completo como medida preventiva. Se espera entrega del disco el 26/05/2026 para proceder con la reconstrucción del arreglo.</dd>
+        </dl>
+        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
+      </article>
+
+    </section>
+
+    <section aria-labelledby="resumen-titulo">
+      <h2 id="resumen-titulo">Resumen por Estado y Prioridad</h2>
+      <table>
+        <caption>Resumen estadístico de tickets por prioridad y estado</caption>
+        <thead>
+          <tr>
+            <th scope="col">Prioridad</th>
+            <th scope="col">Abiertos</th>
+            <th scope="col">En Proceso</th>
+            <th scope="col">Resueltos</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Crítica</th>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <th scope="row">Alta</th>
+            <td>2</td>
+            <td>1</td>
+            <td>1</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <th scope="row">Media</th>
+            <td>2</td>
+            <td>1</td>
+            <td>0</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <th scope="row">Baja</th>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            <td>5</td>
+            <td>3</td>
+            <td>2</td>
+            <td>10</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+  </main>
+
+  <aside aria-labelledby="acciones-titulo">
+    <h2 id="acciones-titulo">Acciones Rápidas</h2>
+    <ul>
+      <li><a href="reportar.html">Reportar nuevo incidente</a></li>
+      <li><a href="index.html">Volver al panel principal</a></li>
+    </ul>
+
+    <h3>Técnicos Disponibles</h3>
+    <ul>
+      <li><strong>Ing. María López</strong> – Software / Bases de datos</li>
+      <li><strong>Ing. Pedro Suárez</strong> – Redes y conectividad</li>
+      <li><strong>Ing. Carlos Reyes</strong> – Hardware y servidores</li>
+    </ul>
+  </aside>
+
+  <footer>
+    <p>
+      <small>
+        Sistema Help Desk – Data Center &copy; 2026 |
+        Universidad Técnica de Manabí |
+        Desarrollo de Sistemas Informáticos – Unidad 2
+      </small>
+    </p>
+    <p>
+      <small>
+        Proyecto desarrollado por: <strong>Carlos Andrés Mejía Torres</strong> |
+        Repositorio:
+        <a href="https://github.com/wloor9692/helpdesk-datacenter" target="_blank" rel="noopener noreferrer">
+          github.com/wloor9692/helpdesk-datacenter
+        </a>
+      </small>
+    </p>
+    <nav aria-label="Navegación de pie de página">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="reportar.html">Reportar Incidente</a></li>
+        <li><a href="tickets.html">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>

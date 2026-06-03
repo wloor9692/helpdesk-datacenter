@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de Gestión de Incidentes Help Desk para infraestructura de Data Center - Universidad Técnica de Manabí">
+  <meta name="author" content="Carlos Andrés Mejía Torres">
+  <meta name="keywords" content="helpdesk, incidentes, data center, gestión, tickets">
+  <title>Help Desk - Sistema de Gestión de Incidentes | Data Center UTM</title>
+</head>
+<body>
+
+  <header>
+    <h1>Sistema de Gestión de Incidentes</h1>
+    <p><strong>Help Desk – Infraestructura de Data Center</strong></p>
+    <p>Universidad Técnica de Manabí – Facultad de Ciencias Informáticas</p>
+    <nav aria-label="Navegación principal">
+      <ul>
+        <li><a href="index.html" aria-current="page">Inicio</a></li>
+        <li><a href="reportar.html">Reportar Incidente</a></li>
+        <li><a href="tickets.html">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section aria-labelledby="bienvenida-titulo">
+      <h2 id="bienvenida-titulo">Bienvenido al Portal Help Desk</h2>
+      <p>
+        Este sistema permite gestionar, reportar y hacer seguimiento de incidentes técnicos
+        relacionados con hardware, red y software dentro de la infraestructura del Data Center.
+        Utilice el menú de navegación para acceder a las funcionalidades disponibles según su rol.
+      </p>
+    </section>
+
+    <section aria-labelledby="estadisticas-titulo">
+      <h2 id="estadisticas-titulo">Resumen del Sistema</h2>
+      <table>
+        <caption>Estadísticas actuales de tickets por categoría y estado</caption>
+        <thead>
+          <tr>
+            <th scope="col">Categoría</th>
+            <th scope="col">Abiertos</th>
+            <th scope="col">En Proceso</th>
+            <th scope="col">Resueltos</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Hardware</th>
+            <td>3</td>
+            <td>2</td>
+            <td>8</td>
+            <td>13</td>
+          </tr>
+          <tr>
+            <th scope="row">Red</th>
+            <td>1</td>
+            <td>4</td>
+            <td>5</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <th scope="row">Software</th>
+            <td>5</td>
+            <td>1</td>
+            <td>12</td>
+            <td>18</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total general</th>
+            <td>9</td>
+            <td>7</td>
+            <td>25</td>
+            <td>41</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section aria-labelledby="actores-titulo">
+      <h2 id="actores-titulo">Actores del Sistema</h2>
+
+      <article>
+        <h3>Usuario Final</h3>
+        <p>
+          Persona que experimenta un fallo técnico en su estación de trabajo o en los servicios
+          del Data Center. Puede reportar incidentes, consultar el estado de sus tickets y
+          recibir notificaciones automáticas de resolución.
+        </p>
+        <ul>
+          <li>Reportar nuevos incidentes</li>
+          <li>Consultar el estado de tickets enviados</li>
+          <li>Recibir notificaciones de avance</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Técnico de Soporte</h3>
+        <p>
+          Profesional especializado en hardware, red o software, responsable de resolver los
+          incidentes asignados. Actualiza el estado de los tickets a medida que avanza en la
+          resolución del problema reportado.
+        </p>
+        <ul>
+          <li>Recibir asignaciones automáticas por especialidad</li>
+          <li>Actualizar el estado de los tickets</li>
+          <li>Registrar la solución aplicada</li>
+          <li>Escalar incidentes de alta complejidad</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Administrador de Sistemas</h3>
+        <p>
+          Responsable de la configuración general del sistema, gestión de usuarios y
+          generación de reportes de rendimiento del Data Center. Supervisa indicadores
+          clave de desempeño (KPI) del servicio de soporte técnico.
+        </p>
+        <ul>
+          <li>Gestionar usuarios y roles</li>
+          <li>Asignar técnicos a incidentes críticos</li>
+          <li>Generar reportes de rendimiento</li>
+          <li>Configurar categorías y prioridades</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="categorias-titulo">
+      <h2 id="categorias-titulo">Categorías de Incidentes</h2>
+      <dl>
+        <dt><strong>Hardware</strong></dt>
+        <dd>
+          Fallos relacionados con componentes físicos de los servidores del Data Center:
+          discos duros, memoria RAM, fuentes de poder, tarjetas de red físicas, entre otros.
+        </dd>
+
+        <dt><strong>Red</strong></dt>
+        <dd>
+          Problemas de conectividad, configuración de switches, routers, VLANs, pérdida
+          de paquetes, latencia elevada o caída de enlaces de internet.
+        </dd>
+
+        <dt><strong>Software</strong></dt>
+        <dd>
+          Errores en sistemas operativos, aplicaciones empresariales, bases de datos,
+          servicios web o cualquier componente lógico del entorno tecnológico.
+        </dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="acceso-rapido-titulo">
+      <h2 id="acceso-rapido-titulo">Acceso Rápido</h2>
+      <nav aria-label="Accesos rápidos a funcionalidades">
+        <ul>
+          <li>
+            <a href="reportar.html">
+              <strong>Reportar un nuevo incidente</strong> – Registre un fallo técnico en el sistema
+            </a>
+          </li>
+          <li>
+            <a href="tickets.html">
+              <strong>Ver todos los tickets</strong> – Consulte el listado completo de incidentes
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+
+  </main>
+
+  <aside aria-labelledby="avisos-titulo">
+    <h2 id="avisos-titulo">Avisos del Sistema</h2>
+    <ul>
+      <li>
+        <time datetime="2026-05-25">25/05/2026</time> –
+        Mantenimiento programado en servidores zona A el sábado 31 de mayo de 02:00 a 04:00.
+      </li>
+      <li>
+        <time datetime="2026-05-20">20/05/2026</time> –
+        Se actualizó el módulo de notificaciones automáticas. Verifique su correo registrado.
+      </li>
+      <li>
+        <time datetime="2026-05-15">15/05/2026</time> –
+        Nueva categoría "Seguridad" disponible al reportar incidentes.
+      </li>
+    </ul>
+  </aside>
+
+  <footer>
+    <p>
+      <small>
+        Sistema Help Desk – Data Center &copy; 2026 |
+        Universidad Técnica de Manabí |
+        Desarrollo de Sistemas Informáticos – Unidad 2
+      </small>
+    </p>
+    <p>
+      <small>
+        Proyecto desarrollado por: <strong>Carlos Andrés Mejía Torres</strong> |
+        Repositorio:
+        <a href="https://github.com/wloor9692/helpdesk-datacenter" target="_blank" rel="noopener noreferrer">
+          github.com/wloor9692/helpdesk-datacenter
+        </a>
+      </small>
+    </p>
+    <nav aria-label="Navegación de pie de página">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="reportar.html">Reportar Incidente</a></li>
+        <li><a href="tickets.html">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>

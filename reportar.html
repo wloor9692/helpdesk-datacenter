@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Formulario para reportar incidentes técnicos en el sistema Help Desk del Data Center">
+  <meta name="author" content="Carlos Andrés Mejía Torres">
+  <title>Reportar Incidente | Help Desk – Data Center UTM</title>
+</head>
+<body>
+
+  <header>
+    <h1>Sistema de Gestión de Incidentes</h1>
+    <p><strong>Help Desk – Infraestructura de Data Center</strong></p>
+    <p>Universidad Técnica de Manabí – Facultad de Ciencias Informáticas</p>
+    <nav aria-label="Navegación principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="reportar.html" aria-current="page">Reportar Incidente</a></li>
+        <li><a href="tickets.html">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section aria-labelledby="form-titulo">
+      <h2 id="form-titulo">Reportar Nuevo Incidente</h2>
+      <p>
+        Complete el formulario con la información del fallo técnico detectado.
+        Todos los campos marcados con <abbr title="campo obligatorio">*</abbr> son obligatorios.
+        Recibirá una notificación por correo cuando su ticket sea asignado a un técnico.
+      </p>
+
+      <form action="#" method="post" novalidate>
+        <fieldset>
+          <legend>Datos del Solicitante</legend>
+
+          <p>
+            <label for="nombre-solicitante">Nombre completo <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <input
+              type="text"
+              id="nombre-solicitante"
+              name="nombre_solicitante"
+              placeholder="Ej. Juan Pérez González"
+              required
+              minlength="3"
+              maxlength="100"
+              autocomplete="name"
+            >
+          </p>
+
+          <p>
+            <label for="correo-solicitante">Correo electrónico institucional <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <input
+              type="email"
+              id="correo-solicitante"
+              name="correo_solicitante"
+              placeholder="usuario@utm.edu.ec"
+              required
+              autocomplete="email"
+            >
+          </p>
+
+          <p>
+            <label for="telefono-solicitante">Teléfono de contacto</label>
+            <br>
+            <input
+              type="tel"
+              id="telefono-solicitante"
+              name="telefono_solicitante"
+              placeholder="Ej. 0991234567"
+              pattern="[0-9]{7,10}"
+              autocomplete="tel"
+            >
+            <br>
+            <small>Ingrese solo números, entre 7 y 10 dígitos.</small>
+          </p>
+
+          <p>
+            <label for="departamento">Departamento o área</label>
+            <br>
+            <input
+              type="text"
+              id="departamento"
+              name="departamento"
+              placeholder="Ej. Infraestructura TI"
+              maxlength="80"
+            >
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Detalles del Incidente</legend>
+
+          <p>
+            <label for="categoria">Categoría del incidente <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <select id="categoria" name="categoria" required>
+              <option value="">-- Seleccione una categoría --</option>
+              <optgroup label="Infraestructura Física">
+                <option value="hardware-servidor">Hardware – Servidor</option>
+                <option value="hardware-almacenamiento">Hardware – Almacenamiento</option>
+                <option value="hardware-periferico">Hardware – Periférico</option>
+              </optgroup>
+              <optgroup label="Conectividad">
+                <option value="red-lan">Red – LAN</option>
+                <option value="red-wan">Red – WAN / Internet</option>
+                <option value="red-wifi">Red – WiFi</option>
+                <option value="red-vpn">Red – VPN</option>
+              </optgroup>
+              <optgroup label="Software y Sistemas">
+                <option value="software-so">Software – Sistema Operativo</option>
+                <option value="software-aplicacion">Software – Aplicación empresarial</option>
+                <option value="software-bd">Software – Base de datos</option>
+                <option value="software-seguridad">Software – Seguridad / Antivirus</option>
+              </optgroup>
+            </select>
+          </p>
+
+          <p>
+            <label for="prioridad">Prioridad <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <select id="prioridad" name="prioridad" required>
+              <option value="">-- Seleccione la prioridad --</option>
+              <option value="critica">Crítica – Servicio completamente caído</option>
+              <option value="alta">Alta – Impacto significativo en operaciones</option>
+              <option value="media">Media – Funcionalidad parcialmente afectada</option>
+              <option value="baja">Baja – Inconveniente menor, tiene solución alternativa</option>
+            </select>
+          </p>
+
+          <p>
+            <label for="titulo-incidente">Título del incidente <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <input
+              type="text"
+              id="titulo-incidente"
+              name="titulo_incidente"
+              placeholder="Ej. Servidor de base de datos no responde"
+              required
+              minlength="5"
+              maxlength="150"
+            >
+          </p>
+
+          <p>
+            <label for="descripcion">Descripción detallada del problema <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              rows="6"
+              cols="60"
+              placeholder="Describa el problema con el mayor detalle posible: qué ocurrió, cuándo comenzó, qué intentó hacer para solucionarlo..."
+              required
+              minlength="20"
+              maxlength="2000"
+            ></textarea>
+            <br>
+            <small>Mínimo 20 caracteres. Máximo 2000 caracteres.</small>
+          </p>
+
+          <p>
+            <label for="fecha-deteccion">Fecha y hora de detección del fallo <abbr title="obligatorio">*</abbr></label>
+            <br>
+            <input
+              type="datetime-local"
+              id="fecha-deteccion"
+              name="fecha_deteccion"
+              required
+            >
+          </p>
+
+          <p>
+            <label for="equipo-afectado">Equipo o servidor afectado</label>
+            <br>
+            <input
+              type="text"
+              id="equipo-afectado"
+              name="equipo_afectado"
+              placeholder="Ej. SRV-DB-01, PC-LAB-204"
+              maxlength="100"
+            >
+          </p>
+
+          <p>
+            <label for="ip-afectada">Dirección IP del equipo afectado</label>
+            <br>
+            <input
+              type="text"
+              id="ip-afectada"
+              name="ip_afectada"
+              placeholder="Ej. 192.168.1.100"
+              pattern="^(\d{1,3}\.){3}\d{1,3}$"
+              maxlength="15"
+            >
+            <br>
+            <small>Formato: XXX.XXX.XXX.XXX</small>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Impacto y Alcance</legend>
+
+          <p>
+            <label>¿Cuántos usuarios se ven afectados por este incidente?</label>
+            <br>
+            <label>
+              <input type="radio" name="usuarios_afectados" value="solo-yo" required>
+              Solo yo
+            </label>
+            <label>
+              <input type="radio" name="usuarios_afectados" value="mi-equipo">
+              Mi equipo (2–10 personas)
+            </label>
+            <label>
+              <input type="radio" name="usuarios_afectados" value="departamento">
+              Todo un departamento (más de 10)
+            </label>
+            <label>
+              <input type="radio" name="usuarios_afectados" value="toda-organizacion">
+              Toda la organización
+            </label>
+          </p>
+
+          <p>
+            <label>Servicios afectados (marque todos los que correspondan):</label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="correo">
+              Correo electrónico
+            </label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="internet">
+              Acceso a Internet
+            </label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="intranet">
+              Intranet / Red interna
+            </label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="erp">
+              Sistema ERP / Aplicativo empresarial
+            </label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="bd">
+              Base de datos
+            </label>
+            <br>
+            <label>
+              <input type="checkbox" name="servicios_afectados" value="backup">
+              Sistema de respaldo (Backup)
+            </label>
+          </p>
+
+          <p>
+            <label for="pasos-reproduccion">Pasos para reproducir el problema</label>
+            <br>
+            <textarea
+              id="pasos-reproduccion"
+              name="pasos_reproduccion"
+              rows="4"
+              cols="60"
+              placeholder="1. Abrir el sistema...&#10;2. Hacer clic en...&#10;3. El error aparece cuando..."
+              maxlength="1000"
+            ></textarea>
+          </p>
+
+          <p>
+            <label for="adjunto">Adjuntar captura de pantalla o evidencia</label>
+            <br>
+            <input
+              type="file"
+              id="adjunto"
+              name="adjunto"
+              accept="image/png, image/jpeg, image/gif, application/pdf"
+            >
+            <br>
+            <small>Formatos permitidos: PNG, JPG, GIF, PDF. Tamaño máximo: 5 MB.</small>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Confirmación</legend>
+          <p>
+            <label>
+              <input type="checkbox" name="confirmar_datos" value="si" required>
+              Confirmo que la información proporcionada es veraz y completa.
+              <abbr title="obligatorio">*</abbr>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input type="checkbox" name="autorizar_acceso" value="si">
+              Autorizo al técnico asignado a acceder remotamente a mi equipo si fuese necesario.
+            </label>
+          </p>
+        </fieldset>
+
+        <p>
+          <button type="submit">Enviar Reporte de Incidente</button>
+          <button type="reset">Limpiar Formulario</button>
+        </p>
+
+      </form>
+    </section>
+
+    <aside aria-labelledby="instrucciones-titulo">
+      <h2 id="instrucciones-titulo">Instrucciones para Reportar</h2>
+      <ol>
+        <li>Complete todos los campos obligatorios (<abbr title="obligatorio">*</abbr>).</li>
+        <li>Seleccione la categoría que mejor describe el tipo de fallo.</li>
+        <li>Indique la prioridad según el impacto real en sus operaciones.</li>
+        <li>Sea lo más descriptivo posible en la descripción del problema.</li>
+        <li>Adjunte una captura de pantalla si el error es visible en pantalla.</li>
+        <li>Recibirá un correo de confirmación con el número de ticket asignado.</li>
+      </ol>
+
+      <h3>Tiempos de Respuesta por Prioridad</h3>
+      <table>
+        <caption>SLA – Acuerdo de nivel de servicio según prioridad</caption>
+        <thead>
+          <tr>
+            <th scope="col">Prioridad</th>
+            <th scope="col">Primera respuesta</th>
+            <th scope="col">Resolución esperada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Crítica</th>
+            <td>15 minutos</td>
+            <td>2 horas</td>
+          </tr>
+          <tr>
+            <th scope="row">Alta</th>
+            <td>1 hora</td>
+            <td>4 horas</td>
+          </tr>
+          <tr>
+            <th scope="row">Media</th>
+            <td>4 horas</td>
+            <td>1 día hábil</td>
+          </tr>
+          <tr>
+            <th scope="row">Baja</th>
+            <td>1 día hábil</td>
+            <td>3 días hábiles</td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
+
+  </main>
+
+  <footer>
+    <p>
+      <small>
+        Sistema Help Desk – Data Center &copy; 2026 |
+        Universidad Técnica de Manabí |
+        Desarrollo de Sistemas Informáticos – Unidad 2
+      </small>
+    </p>
+    <p>
+      <small>
+        Proyecto desarrollado por: <strong>Carlos Andrés Mejía Torres</strong> |
+        Repositorio:
+        <a href="https://github.com/wloor9692/helpdesk-datacenter" target="_blank" rel="noopener noreferrer">
+          github.com/wloor9692/helpdesk-datacenter
+        </a>
+      </small>
+    </p>
+    <nav aria-label="Navegación de pie de página">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="reportar.html">Reportar Incidente</a></li>
+        <li><a href="tickets.html">Lista de Tickets</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>
