@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UI Kit – Biblioteca de componentes CSS3 para el sistema Help Desk Data Center">
+  <meta name="author" content="Walter Alejandro Loor García">
+  <title>UI Kit – Help Desk Data Center | Unidad 3 DSI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════════ -->
+  <header>
+    <nav class="navbar" aria-label="Barra de navegación principal">
+      <a href="index.html" class="navbar-brand" aria-label="Ir al inicio del UI Kit">
+        <span class="brand-icon" aria-hidden="true">🖥️</span>
+        <span>Help Desk <strong>UI Kit</strong></span>
+      </a>
+      <ul class="navbar-nav" role="menubar">
+        <li role="none"><a href="#colores"    class="nav-link" role="menuitem">Colores</a></li>
+        <li role="none"><a href="#tipografia" class="nav-link" role="menuitem">Tipografía</a></li>
+        <li role="none"><a href="#botones"    class="nav-link" role="menuitem">Botones</a></li>
+        <li role="none"><a href="#formularios"class="nav-link" role="menuitem">Formularios</a></li>
+        <li role="none"><a href="#tarjetas"   class="nav-link" role="menuitem">Tarjetas</a></li>
+        <li role="none"><a href="#alertas"    class="nav-link" role="menuitem">Alertas</a></li>
+        <li role="none"><a href="#tabla"      class="nav-link" role="menuitem">Tabla</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="https://github.com/wloor9692/helpdesk-datacenter"
+           class="btn btn-outline"
+           style="border-color:rgba(255,255,255,.5);color:#fff;font-size:.75rem;"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="Ver repositorio en GitHub">
+          📁 GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       HERO / PORTADA DEL KIT
+  ═══════════════════════════════════════════════════════ -->
+  <section aria-labelledby="hero-titulo"
+           style="background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary) 100%);
+                  padding: var(--space-12) 0; text-align: center; color: #fff;">
+    <div class="container">
+      <p style="font-size:var(--font-size-xs);font-weight:700;text-transform:uppercase;
+                letter-spacing:.15em;color:var(--color-secondary);margin-bottom:var(--space-3);">
+        Actividad #5 – Unidad 3 · Desarrollo de Sistemas Informáticos
+      </p>
+      <h1 id="hero-titulo" style="color:#fff;font-size:var(--font-size-3xl);margin-bottom:var(--space-4);">
+        Librería de Componentes UI
+      </h1>
+      <p style="font-size:var(--font-size-lg);color:rgba(255,255,255,.8);
+                max-width:580px;margin:0 auto var(--space-8);">
+        Design System para el sistema de gestión de incidentes
+        <strong style="color:#fff;">Help Desk – Data Center</strong>.
+        Construido con CSS3 puro, variables <code style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent;">:root</code>
+        y modelo de cajas <code style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent;">border-box</code>.
+      </p>
+      <div class="demo-row" style="justify-content:center;">
+        <span class="badge badge-solid-primary">CSS3 Puro</span>
+        <span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">Variables :root</span>
+        <span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">box-sizing: border-box</span>
+        <span class="badge" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">Diseño Responsivo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ═══════════════════════════════════════════════════════ -->
+  <main id="contenido-principal">
+    <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-16);">
+
+      <!-- ─── PALETA DE COLORES ──────────────────────────── -->
+      <section id="colores" class="demo-section" aria-labelledby="colores-titulo">
+        <p class="demo-eyebrow">01 — Variables :root</p>
+        <h2 class="demo-title" id="colores-titulo">Paleta de Colores Corporativa</h2>
+        <p class="demo-desc">
+          Todos los colores se definen como variables CSS en <code>:root</code>.
+          Esto permite actualizarlos en un solo lugar y propagarlos a todo el sistema.
+        </p>
+
+        <h3 class="text-sm font-semibold" style="margin-bottom:var(--space-3);color:var(--color-gray-500);">Colores primarios y secundarios</h3>
+        <div class="swatch-grid mb-6">
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#1A237E;"></div>
+            <div class="swatch-label">Dark<div class="swatch-value">--color-dark</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#1565C0;"></div>
+            <div class="swatch-label">Primary<div class="swatch-value">--color-primary</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#E3F2FD;"></div>
+            <div class="swatch-label">Primary Light<div class="swatch-value">--color-primary-light</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#E65100;"></div>
+            <div class="swatch-label">Secondary<div class="swatch-value">--color-secondary</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#FFF3E0;"></div>
+            <div class="swatch-label">Secondary Light<div class="swatch-value">--color-secondary-light</div></div>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-semibold" style="margin-bottom:var(--space-3);color:var(--color-gray-500);">Colores de estado</h3>
+        <div class="swatch-grid mb-6">
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#2E7D32;"></div>
+            <div class="swatch-label">Success<div class="swatch-value">--color-success</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#F57F17;"></div>
+            <div class="swatch-label">Warning<div class="swatch-value">--color-warning</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#B71C1C;"></div>
+            <div class="swatch-label">Danger<div class="swatch-value">--color-danger</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#6A1B9A;"></div>
+            <div class="swatch-label">Info<div class="swatch-value">--color-info</div></div>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-semibold" style="margin-bottom:var(--space-3);color:var(--color-gray-500);">Neutros</h3>
+        <div class="swatch-grid">
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#212121;"></div>
+            <div class="swatch-label">Gray 900<div class="swatch-value">--color-gray-900</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#424242;"></div>
+            <div class="swatch-label">Gray 700<div class="swatch-value">--color-gray-700</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#9E9E9E;"></div>
+            <div class="swatch-label">Gray 500<div class="swatch-value">--color-gray-500</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#E0E0E0;"></div>
+            <div class="swatch-label">Gray 300<div class="swatch-value">--color-gray-300</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background-color:#F5F5F5;border:1px solid #E0E0E0;"></div>
+            <div class="swatch-label">Gray 100<div class="swatch-value">--color-gray-100</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── TIPOGRAFÍA ────────────────────────────────── -->
+      <section id="tipografia" class="demo-section" aria-labelledby="tipografia-titulo">
+        <p class="demo-eyebrow">02 — Escala tipográfica</p>
+        <h2 class="demo-title" id="tipografia-titulo">Tipografía</h2>
+        <p class="demo-desc">
+          Fuente base: <code>Segoe UI, Arial, sans-serif</code>.
+          La escala de tamaños y pesos se controla mediante variables CSS.
+        </p>
+
+        <div style="display:grid;gap:var(--space-4);">
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">3xl / 36px</span>
+            <h1 style="margin:0;font-size:var(--font-size-3xl);">Título Principal H1</h1>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">2xl / 30px</span>
+            <h2 style="margin:0;font-size:var(--font-size-2xl);">Sección Principal H2</h2>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">xl / 24px</span>
+            <h3 style="margin:0;font-size:var(--font-size-xl);">Subsección H3</h3>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">base / 16px</span>
+            <p style="margin:0;">Texto base del cuerpo. Se usa en párrafos, descripciones y contenido general del sistema Help Desk.</p>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">sm / 14px</span>
+            <p class="text-sm" style="margin:0;">Texto secundario. Metadatos de tickets, etiquetas de formulario, texto de apoyo.</p>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">xs / 12px</span>
+            <p class="text-xs text-muted" style="margin:0;">TEXTO AUXILIAR — ETIQUETAS — CÓDIGO DE TICKET — FECHAS</p>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:var(--space-6);padding:var(--space-4);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--border-color);">
+            <span style="font-size:var(--font-size-xs);color:var(--color-gray-500);width:90px;flex-shrink:0;font-family:var(--font-mono);">mono</span>
+            <code>TK-00142 · SRV-DB-01 · 192.168.1.100</code>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── BOTONES ────────────────────────────────────── -->
+      <section id="botones" class="demo-section" aria-labelledby="botones-titulo">
+        <p class="demo-eyebrow">03 — Componente</p>
+        <h2 class="demo-title" id="botones-titulo">Botones</h2>
+        <p class="demo-desc">
+          Clase base <code>.btn</code> con modificadores de variante y tamaño.
+          Incluye estados hover, focus visible y disabled.
+        </p>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Variantes</h3>
+        <div class="demo-row">
+          <button class="btn btn-primary"  type="button">Nuevo Ticket</button>
+          <button class="btn btn-secondary"type="button">Reportar Fallo</button>
+          <button class="btn btn-success"  type="button">Resolver</button>
+          <button class="btn btn-danger"   type="button">Escalar</button>
+          <button class="btn btn-outline"  type="button">Ver Detalle</button>
+          <button class="btn btn-ghost"    type="button">Cancelar</button>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Tamaños</h3>
+        <div class="demo-row" style="align-items:center;">
+          <button class="btn btn-primary btn-lg" type="button">Grande</button>
+          <button class="btn btn-primary"        type="button">Normal</button>
+          <button class="btn btn-primary btn-sm" type="button">Pequeño</button>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Estados</h3>
+        <div class="demo-row">
+          <button class="btn btn-primary"           type="button">Activo</button>
+          <button class="btn btn-primary" disabled  type="button">Deshabilitado</button>
+          <button class="btn btn-secondary btn-block" type="button" style="max-width:240px;">Bloque completo</button>
+        </div>
+      </section>
+
+      <!-- ─── FORMULARIOS ──────────────────────────────── -->
+      <section id="formularios" class="demo-section" aria-labelledby="formularios-titulo">
+        <p class="demo-eyebrow">04 — Componente</p>
+        <h2 class="demo-title" id="formularios-titulo">Formularios</h2>
+        <p class="demo-desc">
+          Controles con clase <code>.form-control</code> y agrupación mediante <code>.form-group</code>.
+          Validación visual con clases <code>.is-valid</code> e <code>.is-invalid</code>.
+        </p>
+
+        <div class="card" style="max-width:640px;">
+          <div class="card-header">
+            <h3>Reportar Nuevo Incidente</h3>
+            <span class="badge badge-danger">Formulario activo</span>
+          </div>
+          <div class="card-body">
+            <form action="#" method="post" novalidate>
+              <div class="grid grid-2" style="grid-template-columns:1fr 1fr;gap:var(--space-4);">
+                <div class="form-group">
+                  <label class="form-label" for="demo-nombre">
+                    Nombre del solicitante <span class="required" aria-label="campo obligatorio">*</span>
+                  </label>
+                  <input type="text" id="demo-nombre" name="nombre"
+                         class="form-control is-valid"
+                         value="Carlos Mejía" placeholder="Nombre completo"
+                         required autocomplete="name">
+                  <span class="form-helper">✔ Nombre registrado correctamente.</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="demo-correo">
+                    Correo institucional <span class="required" aria-label="campo obligatorio">*</span>
+                  </label>
+                  <input type="email" id="demo-correo" name="correo"
+                         class="form-control is-invalid"
+                         value="cmejia@" placeholder="usuario@utm.edu.ec"
+                         required autocomplete="email">
+                  <span class="form-error">⚠ Ingrese un correo electrónico válido.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demo-categoria">
+                  Categoría <span class="required" aria-label="campo obligatorio">*</span>
+                </label>
+                <select id="demo-categoria" name="categoria" class="form-control" required>
+                  <option value="">-- Seleccione la categoría --</option>
+                  <optgroup label="Infraestructura Física">
+                    <option value="hw-servidor" selected>Hardware – Servidor</option>
+                    <option value="hw-almacenamiento">Hardware – Almacenamiento</option>
+                  </optgroup>
+                  <optgroup label="Conectividad">
+                    <option value="red-lan">Red – LAN</option>
+                    <option value="red-wan">Red – WAN / Internet</option>
+                    <option value="red-vpn">Red – VPN</option>
+                  </optgroup>
+                  <optgroup label="Software">
+                    <option value="sw-so">Software – Sistema Operativo</option>
+                    <option value="sw-bd">Software – Base de datos</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demo-prioridad">Prioridad</label>
+                <select id="demo-prioridad" name="prioridad" class="form-control">
+                  <option value="critica">Crítica – Servicio completamente caído</option>
+                  <option value="alta" selected>Alta – Impacto significativo</option>
+                  <option value="media">Media – Funcionalidad parcialmente afectada</option>
+                  <option value="baja">Baja – Inconveniente menor</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="demo-descripcion">
+                  Descripción del problema <span class="required" aria-label="campo obligatorio">*</span>
+                </label>
+                <textarea id="demo-descripcion" name="descripcion"
+                          class="form-control" rows="4"
+                          placeholder="Describa el fallo con detalle: cuándo ocurrió, qué servicio afecta, pasos para reproducirlo..."
+                          required minlength="20"></textarea>
+                <span class="form-helper">Mínimo 20 caracteres.</span>
+              </div>
+
+              <div class="form-group">
+                <fieldset style="border:none;padding:0;">
+                  <legend class="form-label">¿Cuántos usuarios se ven afectados?</legend>
+                  <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-2);">
+                    <label class="form-check">
+                      <input type="radio" name="afectados" value="solo-yo" class="form-check-input"> Solo yo
+                    </label>
+                    <label class="form-check">
+                      <input type="radio" name="afectados" value="equipo" class="form-check-input" checked> Mi equipo (2–10 personas)
+                    </label>
+                    <label class="form-check">
+                      <input type="radio" name="afectados" value="dpto" class="form-check-input"> Todo un departamento
+                    </label>
+                    <label class="form-check">
+                      <input type="radio" name="afectados" value="toda" class="form-check-input"> Toda la organización
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Servicios afectados</label>
+                <div style="display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-2);">
+                  <label class="form-check"><input type="checkbox" class="form-check-input" checked> Correo electrónico</label>
+                  <label class="form-check"><input type="checkbox" class="form-check-input"> Base de datos</label>
+                  <label class="form-check"><input type="checkbox" class="form-check-input" checked> Intranet</label>
+                  <label class="form-check"><input type="checkbox" class="form-check-input"> VPN</label>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-4);">
+                <button type="reset"  class="btn btn-ghost">Limpiar</button>
+                <button type="submit" class="btn btn-primary">Enviar Reporte</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── TARJETAS ──────────────────────────────────── -->
+      <section id="tarjetas" class="demo-section" aria-labelledby="tarjetas-titulo">
+        <p class="demo-eyebrow">05 — Componente</p>
+        <h2 class="demo-title" id="tarjetas-titulo">Tarjetas (Cards)</h2>
+        <p class="demo-desc">
+          Componente base <code>.card</code> con variantes de borde lateral coloreado
+          para indicar el tipo o prioridad del incidente.
+        </p>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Tarjetas de estadística (KPI)</h3>
+        <div class="grid grid-4 mb-8">
+          <div class="card-stat card-primary">
+            <span class="card-stat-label">Total tickets</span>
+            <span class="card-stat-value">41</span>
+            <span class="card-stat-meta">↑ 6 nuevos esta semana</span>
+          </div>
+          <div class="card-stat card-danger">
+            <span class="card-stat-label">Críticos abiertos</span>
+            <span class="card-stat-value text-danger">3</span>
+            <span class="card-stat-meta">Requieren atención inmediata</span>
+          </div>
+          <div class="card-stat card-warning">
+            <span class="card-stat-label">En proceso</span>
+            <span class="card-stat-value" style="color:var(--color-warning);">7</span>
+            <span class="card-stat-meta">Asignados a técnicos</span>
+          </div>
+          <div class="card-stat card-success">
+            <span class="card-stat-label">Resueltos hoy</span>
+            <span class="card-stat-value text-success">5</span>
+            <span class="card-stat-meta">Tiempo promedio: 2h 14m</span>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Tarjetas de ticket</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <article class="ticket-card" aria-label="Ticket TK-001 crítico">
+            <div class="ticket-priority-bar critica" aria-label="Prioridad crítica"></div>
+            <div class="ticket-content">
+              <div class="ticket-id">TK-001</div>
+              <div class="ticket-title">Servidor de base de datos no responde en zona A</div>
+              <div class="ticket-meta">
+                <span>💾 Software – BD</span>
+                <span class="badge badge-danger">Crítica</span>
+                <span class="badge badge-primary">En proceso</span>
+                <span>🧑‍💻 Ing. María López</span>
+                <span>🕐 Hace 45 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="ticket-card" aria-label="Ticket TK-002 alta prioridad">
+            <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+            <div class="ticket-content">
+              <div class="ticket-id">TK-002</div>
+              <div class="ticket-title">Pérdida de conectividad en switch de distribución SW-DIST-02</div>
+              <div class="ticket-meta">
+                <span>🌐 Red – LAN</span>
+                <span class="badge badge-warning">Alta</span>
+                <span class="badge badge-gray">Abierto</span>
+                <span>Sin asignar</span>
+                <span>🕐 Hace 1h 20min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="ticket-card" aria-label="Ticket TK-003 resuelto">
+            <div class="ticket-priority-bar baja" aria-label="Prioridad baja"></div>
+            <div class="ticket-content">
+              <div class="ticket-id">TK-003</div>
+              <div class="ticket-title">Impresora de red laboratorio 3 sin conexión</div>
+              <div class="ticket-meta">
+                <span>🖨️ Hardware – Periférico</span>
+                <span class="badge badge-gray">Baja</span>
+                <span class="badge badge-success">Resuelto</span>
+                <span>🧑‍💻 Ing. Carlos Reyes</span>
+                <span>✅ Resuelto hace 2h</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);margin-top:var(--space-8);">Tarjeta con header y footer</h3>
+        <div class="card" style="max-width:480px;">
+          <div class="card-header">
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div class="avatar avatar-md avatar-success" aria-hidden="true">ML</div>
+              <div>
+                <h4 style="margin:0;">Ing. María López</h4>
+                <p class="text-xs text-muted" style="margin:0;">Especialista en Bases de Datos</p>
+              </div>
+            </div>
+            <span class="badge badge-success">Disponible</span>
+          </div>
+          <div class="card-body">
+            <p class="text-sm">Técnica con 5 años de experiencia en administración de bases de datos Oracle, MySQL y PostgreSQL. Disponible para atender incidentes de alta prioridad.</p>
+            <div style="margin-top:var(--space-4);">
+              <p class="text-xs text-muted" style="margin-bottom:var(--space-2);">Carga de trabajo actual</p>
+              <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width:40%;" role="progressbar"
+                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                     aria-label="40% de carga de trabajo"></div>
+              </div>
+              <p class="text-xs text-muted" style="margin-top:var(--space-1);">2 de 5 tickets activos</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-ghost btn-sm" type="button">Ver historial</button>
+            <button class="btn btn-primary btn-sm" type="button">Asignar ticket</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── ALERTAS ──────────────────────────────────── -->
+      <section id="alertas" class="demo-section" aria-labelledby="alertas-titulo">
+        <p class="demo-eyebrow">06 — Componente</p>
+        <h2 class="demo-title" id="alertas-titulo">Alertas</h2>
+        <p class="demo-desc">
+          Cinco variantes de alerta para notificaciones del sistema: informativa,
+          éxito, advertencia, error y morada de información adicional.
+        </p>
+
+        <div role="alert" class="alert alert-danger">
+          <span class="alert-icon" aria-hidden="true">🚨</span>
+          <div class="alert-content">
+            <p class="alert-title">Incidente Crítico Detectado</p>
+            <p style="margin:0;">El servidor SRV-DB-01 ha dejado de responder. Se ha creado automáticamente el ticket <strong>TK-047</strong> y se ha notificado al técnico de guardia.</p>
+          </div>
+          <button class="alert-close" type="button" aria-label="Cerrar alerta">✕</button>
+        </div>
+
+        <div role="status" class="alert alert-success">
+          <span class="alert-icon" aria-hidden="true">✅</span>
+          <div class="alert-content">
+            <p class="alert-title">Incidente Resuelto</p>
+            <p style="margin:0;">El ticket <strong>TK-041</strong> ha sido marcado como resuelto por Ing. María López. Tiempo de resolución: 2h 45min.</p>
+          </div>
+        </div>
+
+        <div role="status" class="alert alert-warning">
+          <span class="alert-icon" aria-hidden="true">⚠️</span>
+          <div class="alert-content">
+            <p class="alert-title">Mantenimiento Programado</p>
+            <p style="margin:0;">El sábado 31 de mayo de 02:00 a 04:00 se realizará mantenimiento en servidores zona A. Los servicios estarán parcialmente disponibles.</p>
+          </div>
+        </div>
+
+        <div role="status" class="alert alert-primary">
+          <span class="alert-icon" aria-hidden="true">ℹ️</span>
+          <div class="alert-content">
+            <p class="alert-title">Nuevo Ticket Asignado</p>
+            <p style="margin:0;">Se le ha asignado el ticket <strong>TK-044</strong> relacionado con fallo en red LAN del piso 3. Prioridad: Alta.</p>
+          </div>
+        </div>
+
+        <div role="status" class="alert alert-info">
+          <span class="alert-icon" aria-hidden="true">🔔</span>
+          <div class="alert-content">
+            <p class="alert-title">Actualización del Sistema</p>
+            <p style="margin:0;">El módulo de notificaciones automáticas fue actualizado. Verifique que su correo institucional esté correctamente registrado.</p>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Badges de estado</h3>
+        <div class="demo-row">
+          <span class="badge badge-danger">Crítica</span>
+          <span class="badge badge-warning">Alta</span>
+          <span class="badge badge-primary">Media</span>
+          <span class="badge badge-success">Baja</span>
+          <span class="badge badge-success">Resuelto</span>
+          <span class="badge badge-primary">En proceso</span>
+          <span class="badge badge-gray">Abierto</span>
+          <span class="badge badge-gray">Cerrado</span>
+          <span class="badge badge-solid-primary">Hardware</span>
+          <span class="badge badge-solid-danger">Crítico</span>
+        </div>
+      </section>
+
+      <!-- ─── TABLA ────────────────────────────────────── -->
+      <section id="tabla" class="demo-section" aria-labelledby="tabla-titulo">
+        <p class="demo-eyebrow">07 — Componente</p>
+        <h2 class="demo-title" id="tabla-titulo">Tabla de Datos</h2>
+        <p class="demo-desc">
+          Tabla con encabezado oscuro, filas alternadas con <code>.table-striped</code>
+          y efecto hover. Usa <code>scope</code> en las cabeceras para accesibilidad.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="table table-striped">
+            <caption class="sr-only">Listado de tickets de incidentes activos en el sistema Help Desk</caption>
+            <thead>
+              <tr>
+                <th scope="col">N.° Ticket</th>
+                <th scope="col">Título del Incidente</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Prioridad</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Técnico</th>
+                <th scope="col">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" style="font-family:var(--font-mono);color:var(--color-primary);font-weight:700;">TK-001</th>
+                <td>Servidor de base de datos no responde</td>
+                <td>Software – BD</td>
+                <td><span class="badge badge-danger">Crítica</span></td>
+                <td><span class="badge badge-primary">En proceso</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:var(--space-2);">
+                    <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                    Ing. María López
+                  </div>
+                </td>
+                <td style="white-space:nowrap;color:var(--color-gray-500);font-size:var(--font-size-xs);">
+                  <time datetime="2026-05-25T08:30">25/05 08:30</time>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="font-family:var(--font-mono);color:var(--color-primary);font-weight:700;">TK-002</th>
+                <td>Pérdida de conectividad en switch SW-DIST-02</td>
+                <td>Red – LAN</td>
+                <td><span class="badge badge-warning">Alta</span></td>
+                <td><span class="badge badge-gray">Abierto</span></td>
+                <td>
+                  <span style="color:var(--color-gray-500);font-size:var(--font-size-xs);">Sin asignar</span>
+                </td>
+                <td style="white-space:nowrap;color:var(--color-gray-500);font-size:var(--font-size-xs);">
+                  <time datetime="2026-05-25T09:00">25/05 09:00</time>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="font-family:var(--font-mono);color:var(--color-primary);font-weight:700;">TK-003</th>
+                <td>Fallo en disco RAID del servidor SRV-FILE-02</td>
+                <td>Hardware – Servidor</td>
+                <td><span class="badge badge-warning">Alta</span></td>
+                <td><span class="badge badge-primary">En proceso</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:var(--space-2);">
+                    <div class="avatar avatar-sm avatar-danger" aria-hidden="true">CR</div>
+                    Ing. Carlos Reyes
+                  </div>
+                </td>
+                <td style="white-space:nowrap;color:var(--color-gray-500);font-size:var(--font-size-xs);">
+                  <time datetime="2026-05-24T14:20">24/05 14:20</time>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="font-family:var(--font-mono);color:var(--color-primary);font-weight:700;">TK-004</th>
+                <td>Sistema de correo institucional inaccesible</td>
+                <td>Software – App</td>
+                <td><span class="badge badge-danger">Crítica</span></td>
+                <td><span class="badge badge-primary">En proceso</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:var(--space-2);">
+                    <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                    Ing. María López
+                  </div>
+                </td>
+                <td style="white-space:nowrap;color:var(--color-gray-500);font-size:var(--font-size-xs);">
+                  <time datetime="2026-05-24T16:05">24/05 16:05</time>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="font-family:var(--font-mono);color:var(--color-primary);font-weight:700;">TK-005</th>
+                <td>VPN corporativa sin conexión desde trabajo remoto</td>
+                <td>Red – VPN</td>
+                <td><span class="badge badge-primary">Media</span></td>
+                <td><span class="badge badge-success">Resuelto</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:var(--space-2);">
+                    <div class="avatar avatar-sm" style="background:var(--color-info);" aria-hidden="true">PS</div>
+                    Ing. Pedro Suárez
+                  </div>
+                </td>
+                <td style="white-space:nowrap;color:var(--color-gray-500);font-size:var(--font-size-xs);">
+                  <time datetime="2026-05-23T11:15">23/05 11:15</time>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ─── AVATARES Y PROGRESS ────────────────────────── -->
+      <section class="demo-section" aria-labelledby="extras-titulo">
+        <p class="demo-eyebrow">08 — Extras</p>
+        <h2 class="demo-title" id="extras-titulo">Avatares y Barras de Progreso</h2>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);">Avatares</h3>
+        <div class="demo-row" style="align-items:center;">
+          <div class="avatar avatar-xl"      aria-label="Administrador">AD</div>
+          <div class="avatar avatar-lg avatar-success" aria-label="Técnico María López">ML</div>
+          <div class="avatar avatar-md avatar-danger"  aria-label="Técnico Carlos Reyes">CR</div>
+          <div class="avatar avatar-sm avatar-info"    aria-label="Técnico Pedro Suárez">PS</div>
+          <div class="avatar avatar-sm avatar-warning" aria-label="Técnico Ana García">AG</div>
+          <div class="avatar avatar-sm avatar-gray"    aria-label="Usuario sin asignar">?</div>
+        </div>
+
+        <h3 class="text-sm font-semibold mb-4" style="color:var(--color-gray-500);margin-top:var(--space-6);">Barras de progreso</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--space-4);max-width:480px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
+              <span class="text-xs text-muted">Tickets resueltos</span>
+              <span class="text-xs font-semibold">61%</span>
+            </div>
+            <div class="progress" role="progressbar" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100" aria-label="61% de tickets resueltos">
+              <div class="progress-bar progress-bar-success" style="width:61%;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
+              <span class="text-xs text-muted">En proceso</span>
+              <span class="text-xs font-semibold">22%</span>
+            </div>
+            <div class="progress" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100" aria-label="22% de tickets en proceso">
+              <div class="progress-bar" style="width:22%;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
+              <span class="text-xs text-muted">Críticos pendientes</span>
+              <span class="text-xs font-semibold text-danger">17%</span>
+            </div>
+            <div class="progress" role="progressbar" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100" aria-label="17% de tickets críticos pendientes">
+              <div class="progress-bar progress-bar-danger" style="width:17%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer style="background-color:var(--color-dark);color:rgba(255,255,255,.7);
+                 padding:var(--space-8) 0;border-top:3px solid var(--color-secondary);">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:var(--space-4);">
+        <div>
+          <p style="font-weight:700;color:#fff;margin-bottom:var(--space-1);">Help Desk UI Kit – Design System</p>
+          <p style="font-size:var(--font-size-sm);margin:0;">
+            Actividad #5 – Unidad 3 · Desarrollo de Sistemas Informáticos<br>
+            Universidad Técnica de Manabí · Período Abril/Agosto 2026
+          </p>
+        </div>
+        <div style="text-align:right;">
+          <p style="font-size:var(--font-size-sm);margin-bottom:var(--space-1);">
+            Autor: <strong style="color:#fff;">Carlos Andrés Mejía Torres</strong>
+          </p>
+          <p style="font-size:var(--font-size-sm);margin:0;">
+            <a href="https://github.com/wloor9692/helpdesk-datacenter"
+               style="color:var(--color-secondary);"
+               target="_blank" rel="noopener noreferrer">
+              github.com/wloor9692/helpdesk-datacenter
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
