@@ -3,282 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Listado completo de tickets de incidentes del sistema Help Desk Data Center">
+  <meta name="description" content="Listado de tickets de incidentes – Help Desk Data Center UTM">
   <meta name="author" content="Walter Alejandro Loor García">
   <title>Tickets | Help Desk – Data Center UTM</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* ── Estilos específicos de la página de tickets ── */
+    *, *::before, *::after { box-sizing: border-box; }
 
-    .page-content {
-      padding: var(--space-6);
-      min-height: calc(100vh - var(--navbar-height));
-      background-color: var(--color-gray-100);
-    }
+    /* ══ HAMBURGUESA ══════════════════════════════════════════ */
+    #nav-toggle { display: none; }
 
-    /* Breadcrumb */
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: var(--font-size-sm);
-      color: var(--color-gray-500);
-      margin-bottom: var(--space-4);
-    }
-    .breadcrumb a { color: var(--color-primary); }
-    .breadcrumb span { color: var(--color-gray-300); }
-
-    /* Encabezado de página */
-    .page-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      margin-bottom: var(--space-6);
-    }
-
-    .page-header h2 {
-      font-size: var(--font-size-2xl);
-      color: var(--color-dark);
-      margin-bottom: var(--space-1);
-    }
-
-    .page-header p {
-      font-size: var(--font-size-sm);
-      color: var(--color-gray-500);
-      margin: 0;
-    }
-
-    /* Barra de filtros */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      align-items: flex-end;
-      padding: var(--space-5);
-      background-color: var(--color-white);
-      border-radius: var(--radius-lg);
-      border: var(--border-width) solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: var(--space-6);
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      min-width: 140px;
-    }
-
-    .filter-group label {
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-gray-500);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-
-    .filter-group select,
-    .filter-group input {
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--font-size-sm);
-      border: var(--border-width) solid var(--border-color);
-      border-radius: var(--radius-md);
-      background-color: var(--color-white);
-      color: var(--color-gray-700);
-      appearance: none;
-    }
-
-    .filter-group select:focus,
-    .filter-group input:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-focus);
-    }
-
-    .filter-group input[type="search"] {
-      min-width: 200px;
-    }
-
-    .filter-actions {
-      display: flex;
-      gap: var(--space-2);
-      align-items: flex-end;
-    }
-
-    /* Vista de tarjetas móvil */
-    .tickets-card-view {
+    .hamburger {
       display: none;
       flex-direction: column;
-      gap: var(--space-3);
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
     }
-
-    /* Vista modal de detalle */
-    .ticket-detail {
-      background-color: var(--color-white);
-      border: var(--border-width) solid var(--border-color);
-      border-radius: var(--radius-lg);
-      margin-top: var(--space-6);
-      overflow: hidden;
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: #fff; border-radius: 2px; transition: all .3s;
     }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(2) { opacity: 0; }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    .ticket-detail-header {
-      padding: var(--space-5) var(--space-6);
-      background: linear-gradient(135deg, var(--color-dark), var(--color-primary));
-      color: white;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: var(--space-4);
-      flex-wrap: wrap;
+    .mobile-nav-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--color-dark);
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: var(--space-3) 0;
     }
-
-    .ticket-detail-header h3 {
-      color: white;
-      margin-bottom: var(--space-2);
-      font-size: var(--font-size-lg);
+    #nav-toggle:checked ~ .mobile-nav-menu { display: flex; }
+    .mobile-nav-menu a {
+      padding: var(--space-3) var(--space-6);
+      color: rgba(255,255,255,.8);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      text-decoration: none;
     }
+    .mobile-nav-menu a:hover,
+    .mobile-nav-menu a.active { background: rgba(255,255,255,.1); color: #fff; text-decoration: none; }
 
-    .ticket-detail-id {
-      font-size: var(--font-size-xs);
-      color: rgba(255,255,255,.7);
-      font-family: var(--font-mono);
-      margin-bottom: var(--space-2);
+    /* ══ LAYOUT ═══════════════════════════════════════════════ */
+    .app-shell { display: flex; min-height: calc(100vh - 64px); }
+
+    .sidebar {
+      width: 240px; min-width: 240px;
+      background: #fff;
+      border-right: 1px solid var(--border-color);
+      padding: var(--space-5) 0;
+      position: sticky; top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
     }
+    .sidebar-section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--color-gray-500);
+      padding: 0 var(--space-5) var(--space-2); display: block;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--font-size-sm); font-weight: 500;
+      color: var(--color-gray-700); text-decoration: none;
+      border-left: 3px solid transparent; transition: all .15s;
+    }
+    .sidebar-link:hover { background: var(--color-primary-light); color: var(--color-primary); text-decoration: none; }
+    .sidebar-link.active { background: var(--color-primary-light); color: var(--color-primary); border-left-color: var(--color-primary); font-weight: 600; }
+    .sidebar-link .icon { width: 20px; text-align: center; flex-shrink: 0; }
+    .sidebar-link .s-badge { margin-left: auto; }
+    .sidebar-hr { border: none; border-top: 1px solid var(--border-color); margin: var(--space-4) var(--space-5); }
 
-    .ticket-detail-body {
+    .main-content {
+      flex: 1; min-width: 0;
       padding: var(--space-6);
+      background: var(--color-gray-100);
+    }
+
+    /* ══ PAGE HEADER ══════════════════════════════════════════ */
+    .breadcrumb {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-size: var(--font-size-sm); color: var(--color-gray-500);
+      margin-bottom: var(--space-4);
+    }
+    .breadcrumb a { color: var(--color-primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .page-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: var(--space-4); margin-bottom: var(--space-5);
+    }
+    .page-header h2 { font-size: 1.6rem; color: var(--color-dark); margin-bottom: var(--space-1); }
+    .page-header p  { font-size: var(--font-size-sm); color: var(--color-gray-500); margin: 0; }
+
+    /* ══ KPI MINI ═════════════════════════════════════════════ */
+    .mini-kpi {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+    .mini-kpi .card-stat { padding: var(--space-4); }
+    .mini-kpi .card-stat-value { font-size: 1.5rem; }
+
+    /* ══ FILTER BAR ═══════════════════════════════════════════ */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: var(--space-3);
+      align-items: flex-end;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-5);
+    }
+    .fg {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .fg label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--color-gray-500);
+    }
+    .fg select, .fg input {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-sm);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: #fff; color: var(--color-gray-700);
+      appearance: none;
+      min-width: 130px;
+    }
+    .fg select:focus, .fg input:focus {
+      outline: none; border-color: var(--color-primary);
+      box-shadow: var(--shadow-focus);
+    }
+    .fg-search { flex: 1; }
+    .fg-search input { width: 100%; }
+    .filter-actions { display: flex; gap: var(--space-2); align-items: flex-end; }
+
+    /* ══ TABLA ESCRITORIO ═════════════════════════════════════ */
+    .tickets-table-wrap {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      background: #fff;
+      margin-bottom: var(--space-6);
+    }
+    .tickets-table-wrap table {
+      width: 100%; border-collapse: collapse;
+      font-size: var(--font-size-sm); min-width: 700px;
+    }
+    .tickets-table-wrap thead th {
+      padding: var(--space-4) var(--space-4);
+      text-align: left;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: #fff; background: var(--color-dark);
+      border-bottom: 2px solid var(--color-secondary);
+      white-space: nowrap;
+    }
+    .tickets-table-wrap tbody td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+    .tickets-table-wrap tbody tr:last-child td { border-bottom: none; }
+    .tickets-table-wrap tbody tr:nth-child(odd) { background: var(--color-gray-100); }
+    .tickets-table-wrap tbody tr:hover { background: var(--color-primary-light); }
+    .t-id {
+      font-family: var(--font-mono); font-weight: 700;
+      color: var(--color-primary); text-decoration: none;
+    }
+    .t-id:hover { text-decoration: underline; }
+    .t-actions { display: flex; gap: var(--space-2); }
+
+    /* ══ CARDS MÓVIL ══════════════════════════════════════════ */
+    .tickets-cards { display: none; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6); }
+
+    /* ══ DETALLE DE TICKET ════════════════════════════════════ */
+    .ticket-detail {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-5);
+    }
+    .detail-header {
+      padding: var(--space-5) var(--space-6);
+      background: linear-gradient(135deg, #1A237E, #1565C0);
+      color: #fff;
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);
+    }
+    .detail-header h3 { color: #fff; margin-bottom: var(--space-2); font-size: 1.1rem; }
+    .detail-ticket-id { font-size: 11px; color: rgba(255,255,255,.7); font-family: monospace; margin-bottom: 4px; }
+    .detail-body {
+      padding: var(--space-5) var(--space-6);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
+      gap: var(--space-5);
+    }
+    .df { display: flex; flex-direction: column; gap: 4px; }
+    .df-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--color-gray-500);
+    }
+    .df-value { font-size: var(--font-size-sm); color: var(--color-gray-700); }
+    .df-mono  { font-family: monospace; color: var(--color-primary); }
+    .df-full  { grid-column: 1 / -1; }
+    .detail-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border-color);
+      background: var(--color-gray-100);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3);
     }
 
-    .detail-field {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
+    /* ══ FOOTER ═══════════════════════════════════════════════ */
+    .site-footer {
+      background: var(--color-dark); color: rgba(255,255,255,.7);
+      padding: var(--space-6) 0; border-top: 3px solid var(--color-secondary);
     }
-
-    .detail-label {
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--color-gray-500);
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);
     }
+    .footer-inner p { font-size: var(--font-size-sm); margin: 0; }
 
-    .detail-value {
-      font-size: var(--font-size-sm);
-      color: var(--color-gray-700);
-    }
-
-    .detail-value.mono {
-      font-family: var(--font-mono);
-      color: var(--color-primary);
-    }
-
-    .detail-desc {
-      grid-column: 1 / -1;
-    }
-
-    /* Responsive */
+    /* ══ RESPONSIVE ═══════════════════════════════════════════ */
     @media (max-width: 1024px) {
-      .ticket-detail-body {
-        grid-template-columns: 1fr;
-      }
-      .detail-desc {
-        grid-column: 1;
-      }
+      .mini-kpi { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
-      .page-content { padding: var(--space-4); }
-      .page-header { flex-direction: column; }
+      /* Activar hamburguesa */
+      .hamburger { display: flex; }
+      .navbar .navbar-nav { display: none; }
 
-      .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .filter-group { min-width: 100%; }
-      .filter-group input[type="search"] { min-width: 100%; }
+      /* Ocultar sidebar */
+      .sidebar { display: none; }
+
+      .main-content { padding: var(--space-4); }
+
+      .page-header { flex-direction: column; align-items: flex-start; }
+
+      /* Ocultar tabla, mostrar cards */
+      .tickets-table-wrap { display: none; }
+      .tickets-cards { display: flex; }
+
+      /* Filtros en columna */
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .fg { width: 100%; }
+      .fg select, .fg input { width: 100%; min-width: 100%; }
       .filter-actions { width: 100%; }
       .filter-actions .btn { flex: 1; justify-content: center; }
 
-      /* En móvil oculta la tabla y muestra las cards */
-      .table-wrapper { display: none; }
-      .tickets-card-view { display: flex; }
+      /* Detalle en una columna */
+      .detail-body { grid-template-columns: 1fr; }
+      .df-full { grid-column: 1; }
+      .detail-header { flex-direction: column; }
+      .detail-footer { flex-direction: column; }
+      .detail-footer > div { width: 100%; display: flex; gap: var(--space-2); }
+      .detail-footer > div .btn { flex: 1; justify-content: center; }
     }
 
     @media (max-width: 480px) {
-      .ticket-detail-body { padding: var(--space-4); }
-      .ticket-detail-header { padding: var(--space-4); }
+      .mini-kpi { grid-template-columns: repeat(2, 1fr); }
+      .detail-body { padding: var(--space-4); }
+      .detail-header { padding: var(--space-4); }
+      .detail-footer { padding: var(--space-4); }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <header>
-    <nav class="navbar" aria-label="Barra de navegación principal">
-      <a href="index.html" class="navbar-brand" aria-label="Help Desk – Inicio">
-        <span class="brand-icon" aria-hidden="true">🖥️</span>
-        <span>Help <strong>Desk</strong></span>
-      </a>
-      <ul class="navbar-nav" role="menubar">
-        <li role="none"><a href="index.html" class="nav-link" role="menuitem">Dashboard</a></li>
-        <li role="none"><a href="reportar.html" class="nav-link" role="menuitem">Reportar</a></li>
-        <li role="none"><a href="tickets.html" class="nav-link active" role="menuitem" aria-current="page">Tickets</a></li>
-      </ul>
-      <div class="navbar-actions">
-        <div class="flex items-center gap-4">
-          <a href="reportar.html" class="btn btn-secondary btn-sm">➕ Nuevo ticket</a>
-          <div class="avatar avatar-sm" aria-label="Usuario: Walter Loor">WL</div>
-        </div>
-      </div>
-    </nav>
-  </header>
+  <input type="checkbox" id="nav-toggle" class="sr-only">
 
-  <!-- LAYOUT -->
-  <div class="flex" style="min-height:calc(100vh - var(--navbar-height));">
+  <!-- NAVBAR -->
+  <nav class="navbar" aria-label="Navegación principal">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-icon">🖥️</span>
+      <span>Help <strong>Desk</strong></span>
+    </a>
+    <ul class="navbar-nav" role="menubar">
+      <li><a href="index.html"    class="nav-link">Dashboard</a></li>
+      <li><a href="reportar.html" class="nav-link">Reportar</a></li>
+      <li><a href="tickets.html"  class="nav-link active" aria-current="page">Tickets</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <div style="display:flex;align-items:center;gap:var(--space-3);">
+        <a href="reportar.html" class="btn btn-secondary btn-sm">➕ Nuevo</a>
+        <div class="avatar avatar-sm">WL</div>
+      </div>
+    </div>
+    <label for="nav-toggle" class="hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </label>
+  </nav>
+
+  <div class="mobile-nav-menu" role="navigation" aria-label="Menú móvil">
+    <a href="index.html">📊 Dashboard</a>
+    <a href="reportar.html">➕ Reportar Incidente</a>
+    <a href="tickets.html" class="active">🎫 Tickets</a>
+  </div>
+
+  <!-- APP SHELL -->
+  <div class="app-shell">
 
     <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="Menú lateral">
-      <nav>
-        <span class="sidebar-label">Principal</span>
-        <a href="index.html" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">📊</span>Dashboard
-        </a>
-        <a href="reportar.html" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">➕</span>Reportar Incidente
-        </a>
-        <a href="tickets.html" class="sidebar-item active" aria-current="page">
-          <span class="sidebar-icon" aria-hidden="true">🎫</span>Todos los Tickets
-          <span class="sidebar-badge">
-            <span class="badge badge-gray">41</span>
-          </span>
-        </a>
-        <hr class="sidebar-divider">
-        <span class="sidebar-label">Gestión</span>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">👥</span>Técnicos
-        </a>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">📈</span>Reportes
-        </a>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">⚙️</span>Configuración
-        </a>
-      </nav>
+      <span class="sidebar-section-label">Principal</span>
+      <a href="index.html" class="sidebar-link">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a href="reportar.html" class="sidebar-link">
+        <span class="icon">➕</span> Reportar Incidente
+      </a>
+      <a href="tickets.html" class="sidebar-link active" aria-current="page">
+        <span class="icon">🎫</span> Todos los Tickets
+        <span class="s-badge"><span class="badge badge-gray">41</span></span>
+      </a>
+      <hr class="sidebar-hr">
+      <span class="sidebar-section-label">Gestión</span>
+      <a href="#" class="sidebar-link"><span class="icon">👥</span> Técnicos</a>
+      <a href="#" class="sidebar-link"><span class="icon">📈</span> Reportes</a>
+      <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Configuración</a>
     </aside>
 
-    <!-- CONTENIDO -->
-    <main id="contenido-principal" class="flex-1 page-content">
+    <!-- MAIN -->
+    <main id="main" class="main-content">
 
       <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Ruta de navegación">
         <a href="index.html">Dashboard</a>
-        <span aria-hidden="true">›</span>
+        <span>›</span>
         <span aria-current="page">Tickets</span>
       </nav>
 
@@ -286,89 +349,86 @@
       <div class="page-header">
         <div>
           <h2>Listado de Tickets</h2>
-          <p>Total: <strong>41 tickets</strong> registrados. Última actualización:
+          <p><strong>41 tickets</strong> registrados · Última actualización:
             <time datetime="2026-07-07">07/07/2026</time>
           </p>
         </div>
         <a href="reportar.html" class="btn btn-primary">➕ Nuevo ticket</a>
       </div>
 
-      <!-- KPI mini -->
-      <div class="grid grid-4 mb-6">
-        <div class="card-stat card-danger" style="padding:var(--space-4);">
+      <!-- Mini KPIs -->
+      <div class="mini-kpi">
+        <div class="card-stat card-danger">
           <span class="card-stat-label">Críticos</span>
-          <span class="card-stat-value text-danger" style="font-size:var(--font-size-2xl);">3</span>
+          <span class="card-stat-value text-danger">3</span>
         </div>
-        <div class="card-stat card-warning" style="padding:var(--space-4);">
+        <div class="card-stat card-warning">
           <span class="card-stat-label">En proceso</span>
-          <span class="card-stat-value" style="font-size:var(--font-size-2xl);color:var(--color-warning);">7</span>
+          <span class="card-stat-value" style="color:var(--color-warning);">7</span>
         </div>
-        <div class="card-stat card-primary" style="padding:var(--space-4);">
+        <div class="card-stat card-primary">
           <span class="card-stat-label">Abiertos</span>
-          <span class="card-stat-value" style="font-size:var(--font-size-2xl);">6</span>
+          <span class="card-stat-value">6</span>
         </div>
-        <div class="card-stat card-success" style="padding:var(--space-4);">
+        <div class="card-stat card-success">
           <span class="card-stat-label">Resueltos</span>
-          <span class="card-stat-value text-success" style="font-size:var(--font-size-2xl);">25</span>
+          <span class="card-stat-value text-success">25</span>
         </div>
       </div>
 
-      <!-- Barra de filtros -->
+      <!-- Filtros -->
       <form role="search" aria-label="Filtrar tickets">
         <div class="filter-bar">
-          <div class="filter-group">
-            <label for="filtro-estado">Estado</label>
-            <select id="filtro-estado" name="estado">
+          <div class="fg">
+            <label for="f-estado">Estado</label>
+            <select id="f-estado" name="estado">
               <option value="">Todos</option>
-              <option value="abierto">Abierto</option>
-              <option value="en-proceso">En proceso</option>
-              <option value="resuelto">Resuelto</option>
-              <option value="cerrado">Cerrado</option>
+              <option>Abierto</option>
+              <option>En proceso</option>
+              <option>Resuelto</option>
+              <option>Cerrado</option>
             </select>
           </div>
-          <div class="filter-group">
-            <label for="filtro-categoria">Categoría</label>
-            <select id="filtro-categoria" name="categoria">
+          <div class="fg">
+            <label for="f-cat">Categoría</label>
+            <select id="f-cat" name="categoria">
               <option value="">Todas</option>
-              <option value="hardware">Hardware</option>
-              <option value="red">Red</option>
-              <option value="software">Software</option>
+              <option>Hardware</option>
+              <option>Red</option>
+              <option>Software</option>
             </select>
           </div>
-          <div class="filter-group">
-            <label for="filtro-prioridad">Prioridad</label>
-            <select id="filtro-prioridad" name="prioridad">
+          <div class="fg">
+            <label for="f-prio">Prioridad</label>
+            <select id="f-prio" name="prioridad">
               <option value="">Todas</option>
-              <option value="critica">Crítica</option>
-              <option value="alta">Alta</option>
-              <option value="media">Media</option>
-              <option value="baja">Baja</option>
+              <option>Crítica</option>
+              <option>Alta</option>
+              <option>Media</option>
+              <option>Baja</option>
             </select>
           </div>
-          <div class="filter-group" style="flex:1;">
-            <label for="filtro-busqueda">Buscar</label>
-            <input type="search" id="filtro-busqueda" name="busqueda"
-                   placeholder="Buscar por título, técnico o número..."
-                   maxlength="100">
+          <div class="fg fg-search">
+            <label for="f-bus">Buscar</label>
+            <input type="search" id="f-bus" name="busqueda"
+                   placeholder="Título, técnico o número de ticket...">
           </div>
           <div class="filter-actions">
             <button type="submit" class="btn btn-primary btn-sm">🔍 Filtrar</button>
-            <button type="reset" class="btn btn-ghost btn-sm">Limpiar</button>
+            <button type="reset"  class="btn btn-ghost btn-sm">Limpiar</button>
           </div>
         </div>
       </form>
 
       <!-- ── TABLA (escritorio) ── -->
-      <div class="table-wrapper mb-6">
-        <table class="table table-striped">
-          <caption class="sr-only">
-            Listado de tickets de incidentes registrados en el sistema Help Desk del Data Center
-          </caption>
+      <div class="tickets-table-wrap">
+        <table>
+          <caption class="sr-only">Tickets de incidentes registrados en el sistema Help Desk</caption>
           <thead>
             <tr>
-              <th scope="col">N.° Ticket</th>
-              <th scope="col">Fecha apertura</th>
-              <th scope="col">Título del incidente</th>
+              <th scope="col">Ticket</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Título</th>
               <th scope="col">Categoría</th>
               <th scope="col">Prioridad</th>
               <th scope="col">Estado</th>
@@ -378,110 +438,95 @@
           </thead>
           <tbody>
             <tr>
-              <th scope="row">
-                <a href="#detalle-TK-001" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
-                   aria-label="Ver detalle del ticket TK-001">TK-001</a>
-              </th>
-              <td><time datetime="2026-07-07T08:30">07/07 08:30</time></td>
+              <td><a class="t-id" href="#det-TK-001" aria-label="Detalle TK-001">TK-001</a></td>
+              <td><time datetime="2026-07-07T08:30" style="font-size:var(--font-size-xs);color:var(--color-gray-500);">07/07 08:30</time></td>
               <td>Servidor BD no responde en zona A</td>
-              <td><span class="badge badge-solid-primary" style="font-size:10px;">Software</span></td>
+              <td><span class="badge badge-gray" style="font-size:10px;">Software</span></td>
               <td><span class="badge badge-danger">Crítica</span></td>
               <td><span class="badge badge-primary">En proceso</span></td>
               <td>
-                <div class="flex items-center gap-2">
-                  <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="avatar avatar-sm avatar-success">ML</div>
                   <span style="font-size:var(--font-size-xs);">Ing. M. López</span>
                 </div>
               </td>
               <td>
-                <div class="flex gap-2">
-                  <a href="#detalle-TK-001" class="btn btn-ghost btn-sm" aria-label="Ver TK-001">👁</a>
-                  <button class="btn btn-ghost btn-sm" type="button" aria-label="Editar TK-001">✏️</button>
+                <div class="t-actions">
+                  <a href="#det-TK-001" class="btn btn-ghost btn-sm" aria-label="Ver TK-001">👁</a>
+                  <button class="btn btn-ghost btn-sm" type="button">✏️</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <th scope="row">
-                <a href="#detalle-TK-002" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
-                   aria-label="Ver detalle del ticket TK-002">TK-002</a>
-              </th>
-              <td><time datetime="2026-07-07T09:00">07/07 09:00</time></td>
+              <td><a class="t-id" href="#det-TK-002" aria-label="Detalle TK-002">TK-002</a></td>
+              <td><time datetime="2026-07-07T09:00" style="font-size:var(--font-size-xs);color:var(--color-gray-500);">07/07 09:00</time></td>
               <td>Pérdida de conectividad SW-DIST-02</td>
-              <td><span class="badge badge-solid-primary" style="font-size:10px;background:var(--color-info);">Red</span></td>
+              <td><span class="badge badge-gray" style="font-size:10px;">Red</span></td>
               <td><span class="badge badge-warning">Alta</span></td>
               <td><span class="badge badge-gray">Abierto</span></td>
               <td><span style="font-size:var(--font-size-xs);color:var(--color-gray-500);">Sin asignar</span></td>
               <td>
-                <div class="flex gap-2">
-                  <a href="#detalle-TK-002" class="btn btn-ghost btn-sm" aria-label="Ver TK-002">👁</a>
-                  <button class="btn btn-primary btn-sm" type="button" aria-label="Asignar TK-002">Asignar</button>
+                <div class="t-actions">
+                  <a href="#det-TK-002" class="btn btn-ghost btn-sm">👁</a>
+                  <button class="btn btn-primary btn-sm" type="button">Asignar</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <th scope="row">
-                <a href="#detalle-TK-003" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
-                   aria-label="Ver detalle del ticket TK-003">TK-003</a>
-              </th>
-              <td><time datetime="2026-07-06T14:20">06/07 14:20</time></td>
+              <td><a class="t-id" href="#det-TK-003" aria-label="Detalle TK-003">TK-003</a></td>
+              <td><time datetime="2026-07-06T14:20" style="font-size:var(--font-size-xs);color:var(--color-gray-500);">06/07 14:20</time></td>
               <td>Fallo disco RAID servidor SRV-FILE-02</td>
-              <td><span class="badge badge-solid-primary" style="font-size:10px;">Hardware</span></td>
+              <td><span class="badge badge-gray" style="font-size:10px;">Hardware</span></td>
               <td><span class="badge badge-warning">Alta</span></td>
               <td><span class="badge badge-primary">En proceso</span></td>
               <td>
-                <div class="flex items-center gap-2">
-                  <div class="avatar avatar-sm avatar-danger" aria-hidden="true">CR</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="avatar avatar-sm avatar-danger">CR</div>
                   <span style="font-size:var(--font-size-xs);">Ing. C. Reyes</span>
                 </div>
               </td>
               <td>
-                <div class="flex gap-2">
-                  <a href="#detalle-TK-003" class="btn btn-ghost btn-sm" aria-label="Ver TK-003">👁</a>
-                  <button class="btn btn-ghost btn-sm" type="button" aria-label="Editar TK-003">✏️</button>
+                <div class="t-actions">
+                  <a href="#det-TK-003" class="btn btn-ghost btn-sm">👁</a>
+                  <button class="btn btn-ghost btn-sm" type="button">✏️</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <th scope="row">
-                <a href="#" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
-                   aria-label="Ver detalle del ticket TK-004">TK-004</a>
-              </th>
-              <td><time datetime="2026-07-06T16:05">06/07 16:05</time></td>
+              <td><a class="t-id" href="#" aria-label="Detalle TK-004">TK-004</a></td>
+              <td><time datetime="2026-07-06T16:05" style="font-size:var(--font-size-xs);color:var(--color-gray-500);">06/07 16:05</time></td>
               <td>Sistema de correo institucional inaccesible</td>
-              <td><span class="badge badge-solid-primary" style="font-size:10px;">Software</span></td>
+              <td><span class="badge badge-gray" style="font-size:10px;">Software</span></td>
               <td><span class="badge badge-danger">Crítica</span></td>
               <td><span class="badge badge-primary">En proceso</span></td>
               <td>
-                <div class="flex items-center gap-2">
-                  <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="avatar avatar-sm avatar-success">ML</div>
                   <span style="font-size:var(--font-size-xs);">Ing. M. López</span>
                 </div>
               </td>
               <td>
-                <div class="flex gap-2">
+                <div class="t-actions">
                   <a href="#" class="btn btn-ghost btn-sm">👁</a>
                   <button class="btn btn-ghost btn-sm" type="button">✏️</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <th scope="row">
-                <a href="#" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
-                   aria-label="Ver detalle del ticket TK-005">TK-005</a>
-              </th>
-              <td><time datetime="2026-07-06T11:15">06/07 11:15</time></td>
+              <td><a class="t-id" href="#" aria-label="Detalle TK-005">TK-005</a></td>
+              <td><time datetime="2026-07-06T11:15" style="font-size:var(--font-size-xs);color:var(--color-gray-500);">06/07 11:15</time></td>
               <td>VPN corporativa sin conexión remota</td>
-              <td><span class="badge badge-solid-primary" style="font-size:10px;background:var(--color-info);">Red</span></td>
+              <td><span class="badge badge-gray" style="font-size:10px;">Red</span></td>
               <td><span class="badge badge-primary">Media</span></td>
               <td><span class="badge badge-success">Resuelto</span></td>
               <td>
-                <div class="flex items-center gap-2">
-                  <div class="avatar avatar-sm" style="background:var(--color-info);" aria-hidden="true">PS</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="avatar avatar-sm" style="background:var(--color-info);">PS</div>
                   <span style="font-size:var(--font-size-xs);">Ing. P. Suárez</span>
                 </div>
               </td>
               <td>
-                <div class="flex gap-2">
+                <div class="t-actions">
                   <a href="#" class="btn btn-ghost btn-sm">👁</a>
                   <button class="btn btn-success btn-sm" type="button">✓ Cerrar</button>
                 </div>
@@ -491,189 +536,169 @@
         </table>
       </div>
 
-      <!-- ── VISTA CARDS (móvil) ── -->
-      <div class="tickets-card-view" aria-label="Lista de tickets en vista móvil">
+      <!-- ── CARDS (móvil) ── -->
+      <div class="tickets-cards" aria-label="Tickets en vista móvil">
 
-        <article class="ticket-card" aria-label="Ticket TK-001">
-          <div class="ticket-priority-bar critica" aria-label="Prioridad crítica"></div>
+        <article class="ticket-card" aria-label="Ticket TK-001 crítico">
+          <div class="ticket-priority-bar critica"></div>
           <div class="ticket-content">
             <div class="ticket-id">TK-001 · <time datetime="2026-07-07T08:30">07/07 08:30</time></div>
             <div class="ticket-title">Servidor BD no responde en zona A</div>
-            <div class="ticket-meta">
+            <div class="ticket-meta" style="margin-bottom:var(--space-3);">
               <span class="badge badge-danger">Crítica</span>
               <span class="badge badge-primary">En proceso</span>
               <span>Ing. M. López</span>
             </div>
-            <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);">
-              <a href="#detalle-TK-001" class="btn btn-outline btn-sm">Ver detalle</a>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="#det-TK-001" class="btn btn-outline btn-sm">Ver detalle</a>
+              <button class="btn btn-ghost btn-sm" type="button">✏️ Editar</button>
             </div>
           </div>
         </article>
 
-        <article class="ticket-card" aria-label="Ticket TK-002">
-          <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+        <article class="ticket-card" aria-label="Ticket TK-002 sin asignar">
+          <div class="ticket-priority-bar alta"></div>
           <div class="ticket-content">
             <div class="ticket-id">TK-002 · <time datetime="2026-07-07T09:00">07/07 09:00</time></div>
             <div class="ticket-title">Pérdida de conectividad SW-DIST-02</div>
-            <div class="ticket-meta">
+            <div class="ticket-meta" style="margin-bottom:var(--space-3);">
               <span class="badge badge-warning">Alta</span>
               <span class="badge badge-gray">Abierto</span>
               <span style="color:var(--color-gray-500);">Sin asignar</span>
             </div>
-            <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);">
-              <a href="#detalle-TK-002" class="btn btn-outline btn-sm">Ver detalle</a>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="#det-TK-002" class="btn btn-outline btn-sm">Ver detalle</a>
               <button class="btn btn-primary btn-sm" type="button">Asignar</button>
             </div>
           </div>
         </article>
 
         <article class="ticket-card" aria-label="Ticket TK-003">
-          <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+          <div class="ticket-priority-bar alta"></div>
           <div class="ticket-content">
             <div class="ticket-id">TK-003 · <time datetime="2026-07-06T14:20">06/07 14:20</time></div>
             <div class="ticket-title">Fallo disco RAID servidor SRV-FILE-02</div>
-            <div class="ticket-meta">
+            <div class="ticket-meta" style="margin-bottom:var(--space-3);">
               <span class="badge badge-warning">Alta</span>
               <span class="badge badge-primary">En proceso</span>
               <span>Ing. C. Reyes</span>
             </div>
-            <div style="margin-top:var(--space-3);">
-              <a href="#detalle-TK-003" class="btn btn-outline btn-sm">Ver detalle</a>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="#det-TK-003" class="btn btn-outline btn-sm">Ver detalle</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="ticket-card" aria-label="Ticket TK-004 crítico">
+          <div class="ticket-priority-bar critica"></div>
+          <div class="ticket-content">
+            <div class="ticket-id">TK-004 · <time datetime="2026-07-06T16:05">06/07 16:05</time></div>
+            <div class="ticket-title">Sistema de correo institucional inaccesible</div>
+            <div class="ticket-meta" style="margin-bottom:var(--space-3);">
+              <span class="badge badge-danger">Crítica</span>
+              <span class="badge badge-primary">En proceso</span>
+              <span>Ing. M. López</span>
+            </div>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="#" class="btn btn-outline btn-sm">Ver detalle</a>
             </div>
           </div>
         </article>
 
         <article class="ticket-card" aria-label="Ticket TK-005 resuelto">
-          <div class="ticket-priority-bar baja" aria-label="Prioridad baja"></div>
+          <div class="ticket-priority-bar baja"></div>
           <div class="ticket-content">
             <div class="ticket-id">TK-005 · <time datetime="2026-07-06T11:15">06/07 11:15</time></div>
             <div class="ticket-title">VPN corporativa sin conexión remota</div>
-            <div class="ticket-meta">
+            <div class="ticket-meta" style="margin-bottom:var(--space-3);">
               <span class="badge badge-primary">Media</span>
               <span class="badge badge-success">Resuelto</span>
               <span>Ing. P. Suárez</span>
+            </div>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="#" class="btn btn-outline btn-sm">Ver detalle</a>
+              <button class="btn btn-success btn-sm" type="button">✓ Cerrar</button>
             </div>
           </div>
         </article>
 
       </div>
 
-      <!-- ── DETALLE DE TICKETS ── -->
-      <section aria-labelledby="detalles-titulo">
-        <h2 id="detalles-titulo" style="font-size:var(--font-size-xl);color:var(--color-dark);margin-bottom:var(--space-4);">
-          Detalle de Tickets
-        </h2>
+      <!-- ── DETALLES ── -->
+      <section aria-labelledby="det-h">
+        <h2 id="det-h" style="font-size:1.3rem;color:var(--color-dark);margin-bottom:var(--space-5);">Detalle de Tickets</h2>
 
         <!-- TK-001 -->
-        <article id="detalle-TK-001" class="ticket-detail mb-6" aria-labelledby="titulo-TK-001">
-          <div class="ticket-detail-header">
+        <article id="det-TK-001" class="ticket-detail" aria-labelledby="t1-h">
+          <div class="detail-header">
             <div>
-              <p class="ticket-detail-id">TK-001</p>
-              <h3 id="titulo-TK-001">Servidor de base de datos no responde en zona A</h3>
-              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+              <p class="detail-ticket-id">TK-001</p>
+              <h3 id="t1-h">Servidor de base de datos no responde en zona A</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
                 <span class="badge badge-danger">Crítica</span>
                 <span class="badge badge-primary">En proceso</span>
                 <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Software – BD</span>
               </div>
             </div>
-            <a href="#" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
+            <button class="btn btn-sm" type="button" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
               Actualizar estado
-            </a>
+            </button>
           </div>
-          <div class="ticket-detail-body">
-            <div class="detail-field">
-              <span class="detail-label">Número de ticket</span>
-              <span class="detail-value mono">TK-001</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Fecha de apertura</span>
-              <span class="detail-value">
-                <time datetime="2026-07-07T08:30">07 de julio de 2026, 08:30</time>
-              </span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Técnico asignado</span>
-              <div class="flex items-center gap-2" style="margin-top:var(--space-1);">
-                <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
-                <span class="detail-value">Ing. María López – Especialista en BD</span>
+          <div class="detail-body">
+            <div class="df"><span class="df-label">Número de ticket</span><span class="df-value df-mono">TK-001</span></div>
+            <div class="df"><span class="df-label">Fecha apertura</span><span class="df-value"><time datetime="2026-07-07T08:30">07 de julio de 2026, 08:30</time></span></div>
+            <div class="df">
+              <span class="df-label">Técnico asignado</span>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-top:4px;">
+                <div class="avatar avatar-sm avatar-success">ML</div>
+                <span class="df-value">Ing. María López – Especialista en BD</span>
               </div>
             </div>
-            <div class="detail-field">
-              <span class="detail-label">Servidor afectado</span>
-              <span class="detail-value mono">SRV-DB-01</span>
+            <div class="df"><span class="df-label">Servidor afectado</span><span class="df-value df-mono">SRV-DB-01</span></div>
+            <div class="df df-full"><span class="df-label">Descripción del problema</span>
+              <span class="df-value">El servidor SRV-DB-01 dejó de responder a las 08:25. Los servicios MySQL y PostgreSQL no inician. El log indica corrupción en el tablespace principal.</span>
             </div>
-            <div class="detail-field detail-desc">
-              <span class="detail-label">Descripción del problema</span>
-              <span class="detail-value">
-                El servidor SRV-DB-01 dejó de responder consultas a las 08:25.
-                Los servicios de MySQL y PostgreSQL no inician.
-                El error en log indica corrupción de tablespace en la partición principal.
-              </span>
-            </div>
-            <div class="detail-field detail-desc">
-              <span class="detail-label">Solución en progreso</span>
-              <span class="detail-value">
-                Se inició recuperación de tablespace corrupto mediante respaldo de las 03:00 AM.
-                Se reiniciaron los servicios de base de datos. Validación de integridad en curso.
-              </span>
+            <div class="df df-full"><span class="df-label">Solución en progreso</span>
+              <span class="df-value">Se inició recuperación desde respaldo de las 03:00 AM. Servicios reiniciados. Validación de integridad de datos en curso.</span>
             </div>
           </div>
-          <div class="card-footer" style="justify-content:space-between;">
+          <div class="detail-footer">
             <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
-            <div class="flex gap-2">
+            <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
               <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
-              <button class="btn btn-success btn-sm" type="button">✓ Marcar como resuelto</button>
+              <button class="btn btn-success btn-sm" type="button">✓ Marcar resuelto</button>
             </div>
           </div>
         </article>
 
         <!-- TK-002 -->
-        <article id="detalle-TK-002" class="ticket-detail mb-6" aria-labelledby="titulo-TK-002">
-          <div class="ticket-detail-header" style="background:linear-gradient(135deg,#7F4400,var(--color-secondary));">
+        <article id="det-TK-002" class="ticket-detail" aria-labelledby="t2-h">
+          <div class="detail-header" style="background:linear-gradient(135deg,#7F4400,#E65100);">
             <div>
-              <p class="ticket-detail-id">TK-002</p>
-              <h3 id="titulo-TK-002">Pérdida de conectividad en switch de distribución SW-DIST-02</h3>
-              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+              <p class="detail-ticket-id">TK-002</p>
+              <h3 id="t2-h">Pérdida de conectividad en switch de distribución SW-DIST-02</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
                 <span class="badge badge-warning">Alta</span>
                 <span class="badge badge-gray">Abierto – Sin asignar</span>
                 <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Red – LAN</span>
               </div>
             </div>
-            <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);" type="button">
+            <button class="btn btn-sm" type="button" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
               Asignar técnico
             </button>
           </div>
-          <div class="ticket-detail-body">
-            <div class="detail-field">
-              <span class="detail-label">Número de ticket</span>
-              <span class="detail-value mono">TK-002</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Fecha de apertura</span>
-              <span class="detail-value">
-                <time datetime="2026-07-07T09:00">07 de julio de 2026, 09:00</time>
-              </span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Técnico asignado</span>
-              <span class="detail-value" style="color:var(--color-gray-500);">Sin asignar — pendiente</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Equipo afectado</span>
-              <span class="detail-value mono">SW-DIST-02 (Piso 2)</span>
-            </div>
-            <div class="detail-field detail-desc">
-              <span class="detail-label">Descripción del problema</span>
-              <span class="detail-value">
-                El switch de distribución SW-DIST-02 perdió conectividad con los switches de acceso
-                en el piso 2, dejando sin red a 35 estaciones de trabajo del área administrativa.
-                El equipo no responde a ping desde la red de gestión.
-              </span>
+          <div class="detail-body">
+            <div class="df"><span class="df-label">Número de ticket</span><span class="df-value df-mono">TK-002</span></div>
+            <div class="df"><span class="df-label">Fecha apertura</span><span class="df-value"><time datetime="2026-07-07T09:00">07 de julio de 2026, 09:00</time></span></div>
+            <div class="df"><span class="df-label">Técnico asignado</span><span class="df-value" style="color:var(--color-gray-500);">Sin asignar — pendiente</span></div>
+            <div class="df"><span class="df-label">Equipo afectado</span><span class="df-value df-mono">SW-DIST-02 (Piso 2)</span></div>
+            <div class="df df-full"><span class="df-label">Descripción del problema</span>
+              <span class="df-value">El switch SW-DIST-02 perdió conectividad con los switches de acceso del piso 2, dejando sin red a 35 estaciones del área administrativa. No responde a ping desde la red de gestión.</span>
             </div>
           </div>
-          <div class="card-footer" style="justify-content:space-between;">
+          <div class="detail-footer">
             <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
-            <div class="flex gap-2">
+            <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
               <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
               <button class="btn btn-primary btn-sm" type="button">Asignar técnico</button>
             </div>
@@ -681,65 +706,44 @@
         </article>
 
         <!-- TK-003 -->
-        <article id="detalle-TK-003" class="ticket-detail" aria-labelledby="titulo-TK-003">
-          <div class="ticket-detail-header" style="background:linear-gradient(135deg,var(--color-dark),var(--color-primary));">
+        <article id="det-TK-003" class="ticket-detail" aria-labelledby="t3-h">
+          <div class="detail-header">
             <div>
-              <p class="ticket-detail-id">TK-003</p>
-              <h3 id="titulo-TK-003">Fallo en disco duro RAID del servidor SRV-FILE-02</h3>
-              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+              <p class="detail-ticket-id">TK-003</p>
+              <h3 id="t3-h">Fallo en disco duro RAID del servidor SRV-FILE-02</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
                 <span class="badge badge-warning">Alta</span>
                 <span class="badge badge-primary">En proceso</span>
                 <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Hardware – Servidor</span>
               </div>
             </div>
-            <a href="#" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
+            <button class="btn btn-sm" type="button" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
               Actualizar estado
-            </a>
+            </button>
           </div>
-          <div class="ticket-detail-body">
-            <div class="detail-field">
-              <span class="detail-label">Número de ticket</span>
-              <span class="detail-value mono">TK-003</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Fecha de apertura</span>
-              <span class="detail-value">
-                <time datetime="2026-07-06T14:20">06 de julio de 2026, 14:20</time>
-              </span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Técnico asignado</span>
-              <div class="flex items-center gap-2" style="margin-top:var(--space-1);">
-                <div class="avatar avatar-sm avatar-danger" aria-hidden="true">CR</div>
-                <span class="detail-value">Ing. Carlos Reyes – Especialista en Hardware</span>
+          <div class="detail-body">
+            <div class="df"><span class="df-label">Número de ticket</span><span class="df-value df-mono">TK-003</span></div>
+            <div class="df"><span class="df-label">Fecha apertura</span><span class="df-value"><time datetime="2026-07-06T14:20">06 de julio de 2026, 14:20</time></span></div>
+            <div class="df">
+              <span class="df-label">Técnico asignado</span>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-top:4px;">
+                <div class="avatar avatar-sm avatar-danger">CR</div>
+                <span class="df-value">Ing. Carlos Reyes – Especialista en Hardware</span>
               </div>
             </div>
-            <div class="detail-field">
-              <span class="detail-label">Servidor afectado</span>
-              <span class="detail-value mono">SRV-FILE-02 (Ranura 3)</span>
+            <div class="df"><span class="df-label">Servidor afectado</span><span class="df-value df-mono">SRV-FILE-02 (Ranura 3)</span></div>
+            <div class="df df-full"><span class="df-label">Descripción del problema</span>
+              <span class="df-value">El servidor de archivos reporta degradación del arreglo RAID-5. Disco en ranura 3 marcado como fallido. Datos accesibles pero en modo degradado, con riesgo de pérdida total si falla otro disco.</span>
             </div>
-            <div class="detail-field detail-desc">
-              <span class="detail-label">Descripción del problema</span>
-              <span class="detail-value">
-                El servidor de archivos SRV-FILE-02 reporta degradación del arreglo RAID-5.
-                Un disco en la ranura 3 fue marcado como fallido por el controlador.
-                Los datos están aún accesibles pero en modo degradado, con riesgo de pérdida.
-              </span>
-            </div>
-            <div class="detail-field detail-desc">
-              <span class="detail-label">Avance actual</span>
-              <span class="detail-value">
-                Se solicitó disco de reemplazo al proveedor. Se realizó respaldo completo
-                como medida preventiva. Se espera entrega del disco para proceder con
-                la reconstrucción del arreglo RAID.
-              </span>
+            <div class="df df-full"><span class="df-label">Avance actual</span>
+              <span class="df-value">Disco de reemplazo solicitado al proveedor. Respaldo completo realizado como medida preventiva. Se espera entrega para reconstrucción del arreglo RAID.</span>
             </div>
           </div>
-          <div class="card-footer" style="justify-content:space-between;">
+          <div class="detail-footer">
             <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
-            <div class="flex gap-2">
+            <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
               <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
-              <button class="btn btn-success btn-sm" type="button">✓ Marcar como resuelto</button>
+              <button class="btn btn-success btn-sm" type="button">✓ Marcar resuelto</button>
             </div>
           </div>
         </article>
@@ -747,23 +751,16 @@
       </section>
 
     </main>
-  </div>
+  </div><!-- /app-shell -->
 
   <!-- FOOTER -->
-  <footer style="background-color:var(--color-dark);color:rgba(255,255,255,.7);
-                 padding:var(--space-6) 0;border-top:3px solid var(--color-secondary);">
-    <div class="container">
-      <div class="flex justify-between flex-wrap gap-4">
-        <p style="font-size:var(--font-size-sm);margin:0;">
-          Help Desk – Data Center &copy; 2026 | Universidad Técnica de Manabí
-        </p>
-        <p style="font-size:var(--font-size-sm);margin:0;">
-          Autor: <strong style="color:#fff;">Walter Alejandro Loor García</strong> |
-          <a href="https://github.com/wloor9692/helpdesk-datacenter"
-             style="color:var(--color-secondary);"
-             target="_blank" rel="noopener noreferrer">GitHub</a>
-        </p>
-      </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Help Desk – Data Center &copy; 2026 | Universidad Técnica de Manabí</p>
+      <p>Autor: <strong style="color:#fff;">Walter Alejandro Loor García</strong> |
+        <a href="https://github.com/wloor9692/helpdesk-datacenter"
+           style="color:#E65100;" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
     </div>
   </footer>
 

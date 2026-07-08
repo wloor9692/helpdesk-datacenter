@@ -3,413 +3,441 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dashboard principal del sistema Help Desk para gestión de incidentes del Data Center">
+  <meta name="description" content="Dashboard principal del sistema Help Desk – Data Center UTM">
   <meta name="author" content="Walter Alejandro Loor García">
   <title>Dashboard | Help Desk – Data Center UTM</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* ── Estilos adicionales específicos del Dashboard ── */
+    /* ══ RESET ESPECÍFICO DE PÁGINA ══════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; }
 
-    /* Hero de bienvenida */
-    .dashboard-hero {
-      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary) 100%);
-      padding: var(--space-8) var(--space-6);
+    /* ══ MENÚ HAMBURGUESA ════════════════════════════════════════ */
+    #nav-toggle { display: none; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(2) { opacity: 0; }
+    #nav-toggle:checked ~ .navbar .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav-menu {
+      display: none;
+      flex-direction: column;
+      background-color: var(--color-dark);
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: var(--space-3) 0;
+    }
+    #nav-toggle:checked ~ .mobile-nav-menu { display: flex; }
+
+    .mobile-nav-menu a {
+      padding: var(--space-3) var(--space-6);
+      color: rgba(255,255,255,.8);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .mobile-nav-menu a:hover,
+    .mobile-nav-menu a.active { background: rgba(255,255,255,.1); color: #fff; text-decoration: none; }
+
+    /* ══ LAYOUT APP ═══════════════════════════════════════════════ */
+    .app-shell {
+      display: flex;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ══ SIDEBAR ══════════════════════════════════════════════════ */
+    .sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: #fff;
+      border-right: 1px solid var(--border-color);
+      padding: var(--space-5) 0;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+
+    /* ══ MAIN CONTENT ═════════════════════════════════════════════ */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: var(--space-6);
+      background: var(--color-gray-100);
+    }
+
+    /* ══ HERO ═════════════════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(135deg, #1A237E 0%, #1565C0 100%);
       border-radius: var(--radius-lg);
-      color: var(--color-white);
+      padding: var(--space-8) var(--space-6);
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: var(--space-4);
-      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+    .hero h2 { color: #fff; font-size: 1.6rem; margin-bottom: var(--space-2); }
+    .hero p  { color: rgba(255,255,255,.8); margin: 0; font-size: var(--font-size-sm); }
+    .hero-meta { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); }
+    .hero-date { font-size: var(--font-size-sm); color: rgba(255,255,255,.7); }
+
+    /* ══ KPI GRID ═════════════════════════════════════════════════ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
     }
 
-    .dashboard-hero-text h2 {
-      color: var(--color-white);
-      font-size: var(--font-size-2xl);
+    /* ══ PROGRESS SECTION ════════════════════════════════════════ */
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: var(--space-2);
-    }
-
-    .dashboard-hero-text p {
-      color: rgba(255,255,255,.8);
-      margin: 0;
       font-size: var(--font-size-sm);
     }
 
-    .dashboard-hero-meta {
+    /* ══ BOTTOM GRID ══════════════════════════════════════════════ */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+
+    .right-col {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      gap: var(--space-2);
+      gap: var(--space-6);
     }
 
-    .dashboard-hero-date {
-      font-size: var(--font-size-sm);
-      color: rgba(255,255,255,.7);
-    }
-
-    /* Panel de actividad reciente */
-    .activity-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
+    /* ══ ACTIVIDAD ════════════════════════════════════════════════ */
+    .activity-feed { display: flex; flex-direction: column; }
     .activity-item {
       display: flex;
       align-items: flex-start;
-      gap: var(--space-4);
-      padding: var(--space-4) 0;
-      border-bottom: var(--border-width) solid var(--border-color);
+      gap: var(--space-3);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border-color);
     }
-
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-
+    .activity-item:last-child { border-bottom: none; }
     .activity-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-full);
+      width: 10px; height: 10px;
+      border-radius: 50%;
       flex-shrink: 0;
-      margin-top: 5px;
+      margin-top: 4px;
     }
-
-    .activity-dot-danger  { background-color: var(--color-danger);    }
-    .activity-dot-success { background-color: var(--color-success);   }
-    .activity-dot-warning { background-color: var(--color-warning);   }
-    .activity-dot-primary { background-color: var(--color-primary);   }
-
-    .activity-body { flex: 1; }
-
+    .dot-danger  { background: var(--color-danger); }
+    .dot-success { background: var(--color-success); }
+    .dot-warning { background: var(--color-warning); }
+    .dot-primary { background: var(--color-primary); }
+    .activity-body { flex: 1; min-width: 0; }
     .activity-title {
       font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
+      font-weight: 600;
       color: var(--color-dark);
-      margin-bottom: var(--space-1);
+      margin-bottom: 2px;
     }
+    .activity-desc { font-size: var(--font-size-xs); color: var(--color-gray-500); }
+    .activity-time { font-size: var(--font-size-xs); color: var(--color-gray-500); white-space: nowrap; flex-shrink: 0; }
 
-    .activity-desc {
-      font-size: var(--font-size-xs);
-      color: var(--color-gray-500);
-    }
-
-    .activity-time {
-      font-size: var(--font-size-xs);
-      color: var(--color-gray-500);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* Técnicos disponibles */
-    .tech-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
+    /* ══ TÉCNICOS ═════════════════════════════════════════════════ */
     .tech-item {
       display: flex;
       align-items: center;
       gap: var(--space-3);
       padding: var(--space-3);
       border-radius: var(--radius-md);
-      background-color: var(--color-gray-100);
-      transition: background-color var(--transition-fast);
+      background: var(--color-gray-100);
+      margin-bottom: var(--space-2);
+      transition: background 0.15s;
     }
+    .tech-item:hover { background: var(--color-primary-light); }
+    .tech-item:last-child { margin-bottom: 0; }
+    .tech-info { flex: 1; min-width: 0; }
+    .tech-name { font-size: var(--font-size-sm); font-weight: 600; color: var(--color-dark); }
+    .tech-spec { font-size: var(--font-size-xs); color: var(--color-gray-500); }
 
-    .tech-item:hover {
-      background-color: var(--color-primary-light);
-    }
-
-    .tech-info { flex: 1; }
-
-    .tech-name {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-dark);
-    }
-
-    .tech-specialty {
-      font-size: var(--font-size-xs);
+    /* ══ SIDEBAR ITEMS ════════════════════════════════════════════ */
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
       color: var(--color-gray-500);
+      padding: 0 var(--space-5) var(--space-2);
+      display: block;
     }
-
-    /* Área de contenido principal */
-    .page-content {
-      padding: var(--space-6);
-      min-height: calc(100vh - var(--navbar-height));
-      background-color: var(--color-gray-100);
-    }
-
-    /* Sección de filtros rápidos */
-    .filter-bar {
+    .sidebar-link {
       display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
       align-items: center;
-      padding: var(--space-4) var(--space-5);
-      background-color: var(--color-white);
-      border-radius: var(--radius-lg);
-      border: var(--border-width) solid var(--border-color);
-      margin-bottom: var(--space-6);
-    }
-
-    .filter-bar label {
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-5);
       font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
+      font-weight: 500;
       color: var(--color-gray-700);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
     }
-
-    .filter-bar select {
-      padding: var(--space-2) var(--space-8) var(--space-2) var(--space-3);
-      font-size: var(--font-size-sm);
-      border: var(--border-width) solid var(--border-color);
-      border-radius: var(--radius-md);
-      background-color: var(--color-white);
-      color: var(--color-gray-700);
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239E9E9E' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
+    .sidebar-link:hover { background: var(--color-primary-light); color: var(--color-primary); text-decoration: none; }
+    .sidebar-link.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      border-left-color: var(--color-primary);
+      font-weight: 600;
     }
+    .sidebar-link .icon { width: 20px; text-align: center; font-size: 1rem; flex-shrink: 0; }
+    .sidebar-link .s-badge { margin-left: auto; }
+    .sidebar-hr { border: none; border-top: 1px solid var(--border-color); margin: var(--space-4) var(--space-5); }
 
-    .filter-bar select:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-focus);
+    /* ══ FOOTER ═══════════════════════════════════════════════════ */
+    .site-footer {
+      background: var(--color-dark);
+      color: rgba(255,255,255,.7);
+      padding: var(--space-6) 0;
+      border-top: 3px solid var(--color-secondary);
     }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+    .footer-inner p { font-size: var(--font-size-sm); margin: 0; }
 
-    /* Responsive específico del dashboard */
+    /* ══ RESPONSIVE ═══════════════════════════════════════════════ */
     @media (max-width: 1024px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
+      .kpi-grid        { grid-template-columns: repeat(2, 1fr); }
+      .progress-grid   { grid-template-columns: 1fr; }
+      .bottom-grid     { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
-      .dashboard-hero {
+      /* Menú hamburguesa activo */
+      .hamburger { display: flex; }
+      .navbar .navbar-nav { display: none; }
+
+      /* Sidebar oculto en móvil */
+      .sidebar { display: none; }
+
+      .main-content { padding: var(--space-4); }
+
+      .hero {
         flex-direction: column;
         align-items: flex-start;
+        padding: var(--space-6) var(--space-4);
       }
+      .hero h2 { font-size: 1.3rem; }
+      .hero-meta { align-items: flex-start; }
 
-      .dashboard-hero-meta {
-        align-items: flex-start;
-      }
-
-      .page-content {
-        padding: var(--space-4);
-      }
-
-      .filter-bar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
     }
 
     @media (max-width: 480px) {
-      .dashboard-hero-text h2 {
-        font-size: var(--font-size-xl);
-      }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .navbar-actions .btn { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══════════════════════════════════════════
-       NAVBAR
-  ═══════════════════════════════════════════ -->
-  <header>
-    <nav class="navbar" aria-label="Barra de navegación principal">
-      <a href="index.html" class="navbar-brand" aria-label="Help Desk – Inicio">
-        <span class="brand-icon" aria-hidden="true">🖥️</span>
-        <span>Help <strong>Desk</strong></span>
-      </a>
+  <!-- Checkbox oculto para menú -->
+  <input type="checkbox" id="nav-toggle" class="sr-only" aria-label="Menú de navegación">
 
-      <ul class="navbar-nav" role="menubar" aria-label="Menú principal">
-        <li role="none">
-          <a href="index.html" class="nav-link active" role="menuitem" aria-current="page">Dashboard</a>
-        </li>
-        <li role="none">
-          <a href="reportar.html" class="nav-link" role="menuitem">Reportar</a>
-        </li>
-        <li role="none">
-          <a href="tickets.html" class="nav-link" role="menuitem">Tickets</a>
-        </li>
-      </ul>
+  <!-- ═══ NAVBAR ═══════════════════════════════════════════════ -->
+  <nav class="navbar" aria-label="Navegación principal">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-icon" aria-hidden="true">🖥️</span>
+      <span>Help <strong>Desk</strong></span>
+    </a>
 
-      <div class="navbar-actions">
-        <div class="flex items-center gap-4">
-          <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.6);">
-            Ing. Walter Loor
-          </span>
-          <div class="avatar avatar-sm" aria-label="Usuario: Walter Loor">WL</div>
-        </div>
+    <ul class="navbar-nav" role="menubar">
+      <li><a href="index.html"    class="nav-link active" aria-current="page">Dashboard</a></li>
+      <li><a href="reportar.html" class="nav-link">Reportar</a></li>
+      <li><a href="tickets.html"  class="nav-link">Tickets</a></li>
+    </ul>
+
+    <div class="navbar-actions">
+      <div style="display:flex;align-items:center;gap:var(--space-3);">
+        <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.6);">Ing. Walter Loor</span>
+        <div class="avatar avatar-sm" aria-label="Walter Loor">WL</div>
       </div>
-    </nav>
-  </header>
+    </div>
 
-  <!-- ══════════════════════════════════════════
-       LAYOUT DE DOS PANELES
-  ═══════════════════════════════════════════ -->
-  <div class="flex" style="min-height: calc(100vh - var(--navbar-height));">
+    <label for="nav-toggle" class="hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </label>
+  </nav>
 
-    <!-- SIDEBAR -->
+  <!-- Menú móvil desplegable -->
+  <div class="mobile-nav-menu" role="navigation" aria-label="Menú móvil">
+    <a href="index.html"    class="active">📊 Dashboard</a>
+    <a href="reportar.html">➕ Reportar Incidente</a>
+    <a href="tickets.html">🎫 Tickets</a>
+  </div>
+
+  <!-- ═══ APP SHELL ═════════════════════════════════════════════ -->
+  <div class="app-shell">
+
+    <!-- SIDEBAR (escritorio) -->
     <aside class="sidebar" aria-label="Menú lateral">
-      <nav aria-label="Navegación secundaria">
-
-        <span class="sidebar-label">Principal</span>
-        <a href="index.html" class="sidebar-item active" aria-current="page">
-          <span class="sidebar-icon" aria-hidden="true">📊</span>
-          Dashboard
-          <span class="sidebar-badge">
-            <span class="badge badge-solid-danger" aria-label="3 alertas críticas">3</span>
-          </span>
-        </a>
-        <a href="reportar.html" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">➕</span>
-          Reportar Incidente
-        </a>
-        <a href="tickets.html" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">🎫</span>
-          Todos los Tickets
-          <span class="sidebar-badge">
-            <span class="badge badge-gray" aria-label="41 tickets totales">41</span>
-          </span>
-        </a>
-
-        <hr class="sidebar-divider">
-        <span class="sidebar-label">Gestión</span>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">👥</span>
-          Técnicos
-        </a>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">📈</span>
-          Reportes
-        </a>
-        <a href="#" class="sidebar-item">
-          <span class="sidebar-icon" aria-hidden="true">⚙️</span>
-          Configuración
-        </a>
-      </nav>
+      <span class="sidebar-section-label">Principal</span>
+      <a href="index.html" class="sidebar-link active" aria-current="page">
+        <span class="icon">📊</span> Dashboard
+        <span class="s-badge"><span class="badge badge-solid-danger">3</span></span>
+      </a>
+      <a href="reportar.html" class="sidebar-link">
+        <span class="icon">➕</span> Reportar Incidente
+      </a>
+      <a href="tickets.html" class="sidebar-link">
+        <span class="icon">🎫</span> Todos los Tickets
+        <span class="s-badge"><span class="badge badge-gray">41</span></span>
+      </a>
+      <hr class="sidebar-hr">
+      <span class="sidebar-section-label">Gestión</span>
+      <a href="#" class="sidebar-link"><span class="icon">👥</span> Técnicos</a>
+      <a href="#" class="sidebar-link"><span class="icon">📈</span> Reportes</a>
+      <a href="#" class="sidebar-link"><span class="icon">⚙️</span> Configuración</a>
     </aside>
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main id="contenido-principal" class="flex-1 page-content">
+    <main id="main" class="main-content">
 
-      <!-- Hero de bienvenida -->
-      <div class="dashboard-hero" role="banner">
-        <div class="dashboard-hero-text">
-          <h2>Bienvenido, Ing. Walter Loor</h2>
-          <p>Panel de control del sistema de gestión de incidentes – Data Center UTM</p>
-        </div>
-        <div class="dashboard-hero-meta">
-          <p class="dashboard-hero-date">
-            <time datetime="2026-07-07">Martes, 7 de julio de 2026</time>
-          </p>
-          <a href="reportar.html" class="btn btn-secondary btn-sm">
-            ➕ Nuevo Ticket
-          </a>
-        </div>
-      </div>
-
-      <!-- Alerta activa -->
-      <div role="alert" class="alert alert-danger mb-6">
-        <span class="alert-icon" aria-hidden="true">🚨</span>
+      <!-- Alerta crítica -->
+      <div role="alert" class="alert alert-danger" style="margin-bottom:var(--space-5);">
+        <span class="alert-icon">🚨</span>
         <div class="alert-content">
-          <p class="alert-title">3 incidentes críticos requieren atención inmediata</p>
-          <p style="margin:0;">
-            Los tickets <strong>TK-001</strong>, <strong>TK-004</strong> y <strong>TK-007</strong>
-            están marcados como críticos y llevan más de 1 hora sin asignación.
+          <p class="alert-title">3 incidentes críticos sin atención</p>
+          <p style="margin:0;font-size:var(--font-size-sm);">
+            Tickets <strong>TK-001</strong>, <strong>TK-004</strong> y <strong>TK-007</strong>
+            llevan más de 1 hora abiertos.
             <a href="tickets.html" style="color:inherit;text-decoration:underline;">Ver tickets →</a>
           </p>
         </div>
-        <button class="alert-close" type="button" aria-label="Cerrar alerta">✕</button>
+        <button class="alert-close" type="button" aria-label="Cerrar">✕</button>
       </div>
 
-      <!-- Tarjetas KPI -->
-      <section aria-labelledby="kpi-titulo">
-        <h2 id="kpi-titulo" class="sr-only">Estadísticas generales del sistema</h2>
-        <div class="grid grid-4 mb-8">
-          <div class="card-stat card-primary" role="region" aria-label="Total de tickets">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-text">
+          <h2>Bienvenido, Ing. Walter Loor</h2>
+          <p>Panel de control — Sistema de gestión de incidentes Data Center UTM</p>
+        </div>
+        <div class="hero-meta">
+          <p class="hero-date"><time datetime="2026-07-07">Lunes, 7 de julio de 2026</time></p>
+          <a href="reportar.html" class="btn btn-secondary btn-sm">➕ Nuevo Ticket</a>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <section aria-labelledby="kpi-h">
+        <h2 id="kpi-h" class="sr-only">Estadísticas generales</h2>
+        <div class="kpi-grid">
+          <div class="card-stat card-primary">
             <span class="card-stat-label">Total Tickets</span>
             <span class="card-stat-value">41</span>
             <span class="card-stat-meta">↑ 6 nuevos esta semana</span>
           </div>
-          <div class="card-stat card-danger" role="region" aria-label="Tickets críticos abiertos">
+          <div class="card-stat card-danger">
             <span class="card-stat-label">Críticos Abiertos</span>
             <span class="card-stat-value text-danger">3</span>
-            <span class="card-stat-meta">Requieren atención inmediata</span>
+            <span class="card-stat-meta">Atención inmediata</span>
           </div>
-          <div class="card-stat card-warning" role="region" aria-label="Tickets en proceso">
+          <div class="card-stat card-warning">
             <span class="card-stat-label">En Proceso</span>
             <span class="card-stat-value" style="color:var(--color-warning);">7</span>
             <span class="card-stat-meta">Asignados a técnicos</span>
           </div>
-          <div class="card-stat card-success" role="region" aria-label="Tickets resueltos hoy">
+          <div class="card-stat card-success">
             <span class="card-stat-label">Resueltos Hoy</span>
             <span class="card-stat-value text-success">5</span>
-            <span class="card-stat-meta">Tiempo prom.: 2h 14min</span>
+            <span class="card-stat-meta">Prom: 2h 14min</span>
           </div>
         </div>
       </section>
 
-      <!-- Progreso general -->
-      <section aria-labelledby="progreso-titulo" class="card mb-6">
+      <!-- Progreso -->
+      <div class="card" style="margin-bottom:var(--space-6);">
         <div class="card-header">
-          <h3 id="progreso-titulo">Progreso general de resolución</h3>
-          <span class="badge badge-success">Período: Julio 2026</span>
+          <h3>Progreso de resolución</h3>
+          <span class="badge badge-success">Julio 2026</span>
         </div>
         <div class="card-body">
-          <div class="grid grid-3" style="gap:var(--space-6);">
+          <div class="progress-grid">
             <div>
-              <div class="flex justify-between mb-4" style="margin-bottom:var(--space-2);">
+              <div class="progress-label">
                 <span class="text-sm">Resueltos</span>
                 <span class="text-sm font-semibold text-success">61%</span>
               </div>
-              <div class="progress" role="progressbar" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100" aria-label="61% de tickets resueltos">
+              <div class="progress" role="progressbar" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar progress-bar-success" style="width:61%;"></div>
               </div>
             </div>
             <div>
-              <div class="flex justify-between" style="margin-bottom:var(--space-2);">
+              <div class="progress-label">
                 <span class="text-sm">En proceso</span>
                 <span class="text-sm font-semibold text-primary">22%</span>
               </div>
-              <div class="progress" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100" aria-label="22% de tickets en proceso">
+              <div class="progress" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar" style="width:22%;"></div>
               </div>
             </div>
             <div>
-              <div class="flex justify-between" style="margin-bottom:var(--space-2);">
+              <div class="progress-label">
                 <span class="text-sm">Críticos pendientes</span>
                 <span class="text-sm font-semibold text-danger">17%</span>
               </div>
-              <div class="progress" role="progressbar" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100" aria-label="17% de tickets críticos pendientes">
+              <div class="progress" role="progressbar" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
                 <div class="progress-bar progress-bar-danger" style="width:17%;"></div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- Grid: Tickets recientes + Actividad + Técnicos -->
-      <div class="grid dashboard-grid" style="grid-template-columns: 1fr 1fr; gap:var(--space-6);">
+      <!-- Grid inferior -->
+      <div class="bottom-grid">
 
         <!-- Tickets recientes -->
-        <section aria-labelledby="recientes-titulo">
+        <section aria-labelledby="rec-h">
           <div class="card">
             <div class="card-header">
-              <h3 id="recientes-titulo">Tickets recientes</h3>
+              <h3 id="rec-h">Tickets recientes</h3>
               <a href="tickets.html" class="btn btn-ghost btn-sm">Ver todos →</a>
             </div>
             <div class="card-body" style="padding:var(--space-4);">
               <div style="display:flex;flex-direction:column;gap:var(--space-3);">
 
-                <article class="ticket-card" aria-label="Ticket TK-001 crítico">
-                  <div class="ticket-priority-bar critica" aria-label="Prioridad crítica"></div>
+                <article class="ticket-card" aria-label="Ticket TK-001">
+                  <div class="ticket-priority-bar critica"></div>
                   <div class="ticket-content">
                     <div class="ticket-id">TK-001</div>
                     <div class="ticket-title">Servidor BD no responde en zona A</div>
@@ -421,8 +449,8 @@
                   </div>
                 </article>
 
-                <article class="ticket-card" aria-label="Ticket TK-002 alta prioridad">
-                  <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+                <article class="ticket-card" aria-label="Ticket TK-002">
+                  <div class="ticket-priority-bar alta"></div>
                   <div class="ticket-content">
                     <div class="ticket-id">TK-002</div>
                     <div class="ticket-title">Pérdida de conectividad SW-DIST-02</div>
@@ -434,8 +462,8 @@
                   </div>
                 </article>
 
-                <article class="ticket-card" aria-label="Ticket TK-003 alta prioridad">
-                  <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+                <article class="ticket-card" aria-label="Ticket TK-003">
+                  <div class="ticket-priority-bar alta"></div>
                   <div class="ticket-content">
                     <div class="ticket-id">TK-003</div>
                     <div class="ticket-title">Fallo disco RAID servidor SRV-FILE-02</div>
@@ -447,8 +475,8 @@
                   </div>
                 </article>
 
-                <article class="ticket-card" aria-label="Ticket TK-005 resuelto">
-                  <div class="ticket-priority-bar baja" aria-label="Prioridad baja"></div>
+                <article class="ticket-card" aria-label="Ticket TK-005">
+                  <div class="ticket-priority-bar baja"></div>
                   <div class="ticket-content">
                     <div class="ticket-id">TK-005</div>
                     <div class="ticket-title">VPN corporativa sin conexión remota</div>
@@ -468,125 +496,107 @@
           </div>
         </section>
 
-        <!-- Actividad + Técnicos -->
-        <div style="display:flex;flex-direction:column;gap:var(--space-6);">
+        <!-- Columna derecha -->
+        <div class="right-col">
 
           <!-- Actividad reciente -->
-          <section aria-labelledby="actividad-titulo">
+          <section aria-labelledby="act-h">
             <div class="card">
               <div class="card-header">
-                <h3 id="actividad-titulo">Actividad reciente</h3>
+                <h3 id="act-h">Actividad reciente</h3>
               </div>
               <div class="card-body" style="padding:var(--space-4) var(--space-5);">
-                <div class="activity-feed" role="log" aria-live="polite" aria-label="Registro de actividad del sistema">
-
+                <div class="activity-feed" role="log" aria-live="polite">
                   <div class="activity-item">
-                    <div class="activity-dot activity-dot-danger" aria-hidden="true"></div>
+                    <div class="activity-dot dot-danger"></div>
                     <div class="activity-body">
-                      <p class="activity-title">Incidente crítico — TK-001 abierto</p>
-                      <p class="activity-desc">Servidor SRV-DB-01 sin respuesta. Notificado Ing. María López.</p>
+                      <p class="activity-title">TK-001 crítico abierto</p>
+                      <p class="activity-desc">SRV-DB-01 sin respuesta. Notificado Ing. M. López.</p>
                     </div>
                     <time class="activity-time" datetime="2026-07-07T08:30">08:30</time>
                   </div>
-
                   <div class="activity-item">
-                    <div class="activity-dot activity-dot-success" aria-hidden="true"></div>
+                    <div class="activity-dot dot-success"></div>
                     <div class="activity-body">
-                      <p class="activity-title">TK-005 resuelto por Ing. Pedro Suárez</p>
-                      <p class="activity-desc">VPN restaurada. Tiempo: 1h 45min.</p>
+                      <p class="activity-title">TK-005 resuelto</p>
+                      <p class="activity-desc">VPN restaurada por Ing. P. Suárez.</p>
                     </div>
                     <time class="activity-time" datetime="2026-07-07T07:15">07:15</time>
                   </div>
-
                   <div class="activity-item">
-                    <div class="activity-dot activity-dot-warning" aria-hidden="true"></div>
+                    <div class="activity-dot dot-warning"></div>
                     <div class="activity-body">
-                      <p class="activity-title">TK-002 sin asignar — alerta generada</p>
-                      <p class="activity-desc">Más de 30 minutos sin técnico asignado.</p>
+                      <p class="activity-title">TK-002 sin asignar — alerta</p>
+                      <p class="activity-desc">Más de 30 min sin técnico asignado.</p>
                     </div>
                     <time class="activity-time" datetime="2026-07-07T09:30">09:30</time>
                   </div>
-
                   <div class="activity-item">
-                    <div class="activity-dot activity-dot-primary" aria-hidden="true"></div>
+                    <div class="activity-dot dot-primary"></div>
                     <div class="activity-body">
-                      <p class="activity-title">TK-003 asignado a Ing. Carlos Reyes</p>
+                      <p class="activity-title">TK-003 asignado a Ing. C. Reyes</p>
                       <p class="activity-desc">Fallo RAID en proceso de recuperación.</p>
                     </div>
                     <time class="activity-time" datetime="2026-07-07T06:50">06:50</time>
                   </div>
-
                 </div>
               </div>
             </div>
           </section>
 
-          <!-- Técnicos disponibles -->
-          <section aria-labelledby="tecnicos-titulo">
+          <!-- Técnicos -->
+          <section aria-labelledby="tec-h">
             <div class="card">
               <div class="card-header">
-                <h3 id="tecnicos-titulo">Técnicos disponibles</h3>
+                <h3 id="tec-h">Técnicos disponibles</h3>
                 <span class="badge badge-success">3 activos</span>
               </div>
               <div class="card-body">
-                <div class="tech-list">
-
-                  <div class="tech-item">
-                    <div class="avatar avatar-md avatar-success" aria-hidden="true">ML</div>
-                    <div class="tech-info">
-                      <p class="tech-name">Ing. María López</p>
-                      <p class="tech-specialty">Bases de datos · 2 tickets activos</p>
-                    </div>
-                    <span class="badge badge-success">Disponible</span>
+                <div class="tech-item">
+                  <div class="avatar avatar-md avatar-success">ML</div>
+                  <div class="tech-info">
+                    <p class="tech-name">Ing. María López</p>
+                    <p class="tech-spec">Bases de datos · 2 tickets activos</p>
                   </div>
-
-                  <div class="tech-item">
-                    <div class="avatar avatar-md" style="background:var(--color-info);" aria-hidden="true">PS</div>
-                    <div class="tech-info">
-                      <p class="tech-name">Ing. Pedro Suárez</p>
-                      <p class="tech-specialty">Redes · 1 ticket activo</p>
-                    </div>
-                    <span class="badge badge-success">Disponible</span>
+                  <span class="badge badge-success">Disponible</span>
+                </div>
+                <div class="tech-item">
+                  <div class="avatar avatar-md" style="background:var(--color-info);">PS</div>
+                  <div class="tech-info">
+                    <p class="tech-name">Ing. Pedro Suárez</p>
+                    <p class="tech-spec">Redes · 1 ticket activo</p>
                   </div>
-
-                  <div class="tech-item">
-                    <div class="avatar avatar-md avatar-danger" aria-hidden="true">CR</div>
-                    <div class="tech-info">
-                      <p class="tech-name">Ing. Carlos Reyes</p>
-                      <p class="tech-specialty">Hardware · 3 tickets activos</p>
-                    </div>
-                    <span class="badge badge-warning">Ocupado</span>
+                  <span class="badge badge-success">Disponible</span>
+                </div>
+                <div class="tech-item">
+                  <div class="avatar avatar-md avatar-danger">CR</div>
+                  <div class="tech-info">
+                    <p class="tech-name">Ing. Carlos Reyes</p>
+                    <p class="tech-spec">Hardware · 3 tickets activos</p>
                   </div>
-
+                  <span class="badge badge-warning">Ocupado</span>
                 </div>
               </div>
               <div class="card-footer">
-                <a href="#" class="btn btn-ghost btn-sm">Ver todos los técnicos</a>
+                <a href="#" class="btn btn-ghost btn-sm">Ver todos</a>
               </div>
             </div>
           </section>
 
-        </div>
-      </div>
+        </div><!-- /right-col -->
+      </div><!-- /bottom-grid -->
 
     </main>
-  </div>
+  </div><!-- /app-shell -->
 
   <!-- FOOTER -->
-  <footer style="background-color:var(--color-dark);color:rgba(255,255,255,.7);
-                 padding:var(--space-6) 0;border-top:3px solid var(--color-secondary);">
-    <div class="container">
-      <div class="flex justify-between flex-wrap gap-4">
-        <p style="font-size:var(--font-size-sm);margin:0;">
-          Help Desk – Data Center &copy; 2026 | Universidad Técnica de Manabí
-        </p>
-        <p style="font-size:var(--font-size-sm);margin:0;">
-          Autor: <strong style="color:#fff;">Walter Alejandro Loor García</strong> |
-          <a href="https://github.com/wloor9692/helpdesk-datacenter"
-             style="color:var(--color-secondary);"
-             target="_blank" rel="noopener noreferrer">GitHub</a>
-        </p>
-      </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Help Desk – Data Center &copy; 2026 | Universidad Técnica de Manabí</p>
+      <p>Autor: <strong style="color:#fff;">Walter Alejandro Loor García</strong> |
+        <a href="https://github.com/wloor9692/helpdesk-datacenter"
+           style="color:#E65100;" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
     </div>
   </footer>
 
