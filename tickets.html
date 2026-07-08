@@ -3,422 +3,768 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Listado de tickets de incidentes registrados en el sistema Help Desk del Data Center">
-  <meta name="author" content="Carlos Andrés Mejía Torres">
-  <title>Lista de Tickets | Help Desk – Data Center UTM</title>
+  <meta name="description" content="Listado completo de tickets de incidentes del sistema Help Desk Data Center">
+  <meta name="author" content="Walter Alejandro Loor García">
+  <title>Tickets | Help Desk – Data Center UTM</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Estilos específicos de la página de tickets ── */
+
+    .page-content {
+      padding: var(--space-6);
+      min-height: calc(100vh - var(--navbar-height));
+      background-color: var(--color-gray-100);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-4);
+    }
+    .breadcrumb a { color: var(--color-primary); }
+    .breadcrumb span { color: var(--color-gray-300); }
+
+    /* Encabezado de página */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .page-header h2 {
+      font-size: var(--font-size-2xl);
+      color: var(--color-dark);
+      margin-bottom: var(--space-1);
+    }
+
+    .page-header p {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+      margin: 0;
+    }
+
+    /* Barra de filtros */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      align-items: flex-end;
+      padding: var(--space-5);
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      border: var(--border-width) solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--space-6);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      min-width: 140px;
+    }
+
+    .filter-group label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-sm);
+      border: var(--border-width) solid var(--border-color);
+      border-radius: var(--radius-md);
+      background-color: var(--color-white);
+      color: var(--color-gray-700);
+      appearance: none;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .filter-group input[type="search"] {
+      min-width: 200px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: var(--space-2);
+      align-items: flex-end;
+    }
+
+    /* Vista de tarjetas móvil */
+    .tickets-card-view {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    /* Vista modal de detalle */
+    .ticket-detail {
+      background-color: var(--color-white);
+      border: var(--border-width) solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-top: var(--space-6);
+      overflow: hidden;
+    }
+
+    .ticket-detail-header {
+      padding: var(--space-5) var(--space-6);
+      background: linear-gradient(135deg, var(--color-dark), var(--color-primary));
+      color: white;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .ticket-detail-header h3 {
+      color: white;
+      margin-bottom: var(--space-2);
+      font-size: var(--font-size-lg);
+    }
+
+    .ticket-detail-id {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,.7);
+      font-family: var(--font-mono);
+      margin-bottom: var(--space-2);
+    }
+
+    .ticket-detail-body {
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .detail-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .detail-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--color-gray-500);
+    }
+
+    .detail-value {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-700);
+    }
+
+    .detail-value.mono {
+      font-family: var(--font-mono);
+      color: var(--color-primary);
+    }
+
+    .detail-desc {
+      grid-column: 1 / -1;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .ticket-detail-body {
+        grid-template-columns: 1fr;
+      }
+      .detail-desc {
+        grid-column: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-content { padding: var(--space-4); }
+      .page-header { flex-direction: column; }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group { min-width: 100%; }
+      .filter-group input[type="search"] { min-width: 100%; }
+      .filter-actions { width: 100%; }
+      .filter-actions .btn { flex: 1; justify-content: center; }
+
+      /* En móvil oculta la tabla y muestra las cards */
+      .table-wrapper { display: none; }
+      .tickets-card-view { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      .ticket-detail-body { padding: var(--space-4); }
+      .ticket-detail-header { padding: var(--space-4); }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- NAVBAR -->
   <header>
-    <h1>Sistema de Gestión de Incidentes</h1>
-    <p><strong>Help Desk – Infraestructura de Data Center</strong></p>
-    <p>Universidad Técnica de Manabí – Facultad de Ciencias Informáticas</p>
-    <nav aria-label="Navegación principal">
-      <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="reportar.html">Reportar Incidente</a></li>
-        <li><a href="tickets.html" aria-current="page">Lista de Tickets</a></li>
+    <nav class="navbar" aria-label="Barra de navegación principal">
+      <a href="index.html" class="navbar-brand" aria-label="Help Desk – Inicio">
+        <span class="brand-icon" aria-hidden="true">🖥️</span>
+        <span>Help <strong>Desk</strong></span>
+      </a>
+      <ul class="navbar-nav" role="menubar">
+        <li role="none"><a href="index.html" class="nav-link" role="menuitem">Dashboard</a></li>
+        <li role="none"><a href="reportar.html" class="nav-link" role="menuitem">Reportar</a></li>
+        <li role="none"><a href="tickets.html" class="nav-link active" role="menuitem" aria-current="page">Tickets</a></li>
       </ul>
+      <div class="navbar-actions">
+        <div class="flex items-center gap-4">
+          <a href="reportar.html" class="btn btn-secondary btn-sm">➕ Nuevo ticket</a>
+          <div class="avatar avatar-sm" aria-label="Usuario: Walter Loor">WL</div>
+        </div>
+      </div>
     </nav>
   </header>
 
-  <main>
+  <!-- LAYOUT -->
+  <div class="flex" style="min-height:calc(100vh - var(--navbar-height));">
 
-    <section aria-labelledby="tickets-titulo">
-      <h2 id="tickets-titulo">Listado de Tickets de Incidentes</h2>
-      <p>
-        A continuación se presenta el registro de todos los incidentes reportados en el sistema.
-        Los tickets se ordenan del más reciente al más antiguo. Para reportar un nuevo incidente,
-        acceda al <a href="reportar.html">formulario de reporte</a>.
-      </p>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menú lateral">
+      <nav>
+        <span class="sidebar-label">Principal</span>
+        <a href="index.html" class="sidebar-item">
+          <span class="sidebar-icon" aria-hidden="true">📊</span>Dashboard
+        </a>
+        <a href="reportar.html" class="sidebar-item">
+          <span class="sidebar-icon" aria-hidden="true">➕</span>Reportar Incidente
+        </a>
+        <a href="tickets.html" class="sidebar-item active" aria-current="page">
+          <span class="sidebar-icon" aria-hidden="true">🎫</span>Todos los Tickets
+          <span class="sidebar-badge">
+            <span class="badge badge-gray">41</span>
+          </span>
+        </a>
+        <hr class="sidebar-divider">
+        <span class="sidebar-label">Gestión</span>
+        <a href="#" class="sidebar-item">
+          <span class="sidebar-icon" aria-hidden="true">👥</span>Técnicos
+        </a>
+        <a href="#" class="sidebar-item">
+          <span class="sidebar-icon" aria-hidden="true">📈</span>Reportes
+        </a>
+        <a href="#" class="sidebar-item">
+          <span class="sidebar-icon" aria-hidden="true">⚙️</span>Configuración
+        </a>
+      </nav>
+    </aside>
 
-      <section aria-labelledby="filtros-titulo">
-        <h3 id="filtros-titulo">Filtrar Tickets</h3>
-        <form action="#" method="get">
-          <fieldset>
-            <legend>Opciones de filtrado</legend>
+    <!-- CONTENIDO -->
+    <main id="contenido-principal" class="flex-1 page-content">
 
-            <p>
-              <label for="filtro-estado">Estado:</label>
-              <select id="filtro-estado" name="estado">
-                <option value="">Todos los estados</option>
-                <option value="abierto">Abierto</option>
-                <option value="en-proceso">En Proceso</option>
-                <option value="resuelto">Resuelto</option>
-                <option value="cerrado">Cerrado</option>
-              </select>
-            </p>
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Ruta de navegación">
+        <a href="index.html">Dashboard</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">Tickets</span>
+      </nav>
 
-            <p>
-              <label for="filtro-categoria">Categoría:</label>
-              <select id="filtro-categoria" name="categoria">
-                <option value="">Todas las categorías</option>
-                <option value="hardware">Hardware</option>
-                <option value="red">Red</option>
-                <option value="software">Software</option>
-              </select>
-            </p>
+      <!-- Encabezado -->
+      <div class="page-header">
+        <div>
+          <h2>Listado de Tickets</h2>
+          <p>Total: <strong>41 tickets</strong> registrados. Última actualización:
+            <time datetime="2026-07-07">07/07/2026</time>
+          </p>
+        </div>
+        <a href="reportar.html" class="btn btn-primary">➕ Nuevo ticket</a>
+      </div>
 
-            <p>
-              <label for="filtro-prioridad">Prioridad:</label>
-              <select id="filtro-prioridad" name="prioridad">
-                <option value="">Todas las prioridades</option>
-                <option value="critica">Crítica</option>
-                <option value="alta">Alta</option>
-                <option value="media">Media</option>
-                <option value="baja">Baja</option>
-              </select>
-            </p>
+      <!-- KPI mini -->
+      <div class="grid grid-4 mb-6">
+        <div class="card-stat card-danger" style="padding:var(--space-4);">
+          <span class="card-stat-label">Críticos</span>
+          <span class="card-stat-value text-danger" style="font-size:var(--font-size-2xl);">3</span>
+        </div>
+        <div class="card-stat card-warning" style="padding:var(--space-4);">
+          <span class="card-stat-label">En proceso</span>
+          <span class="card-stat-value" style="font-size:var(--font-size-2xl);color:var(--color-warning);">7</span>
+        </div>
+        <div class="card-stat card-primary" style="padding:var(--space-4);">
+          <span class="card-stat-label">Abiertos</span>
+          <span class="card-stat-value" style="font-size:var(--font-size-2xl);">6</span>
+        </div>
+        <div class="card-stat card-success" style="padding:var(--space-4);">
+          <span class="card-stat-label">Resueltos</span>
+          <span class="card-stat-value text-success" style="font-size:var(--font-size-2xl);">25</span>
+        </div>
+      </div>
 
-            <p>
-              <label for="filtro-busqueda">Buscar por palabra clave:</label>
-              <br>
-              <input
-                type="search"
-                id="filtro-busqueda"
-                name="busqueda"
-                placeholder="Ej. servidor, red, base de datos..."
-                maxlength="100"
-              >
-            </p>
+      <!-- Barra de filtros -->
+      <form role="search" aria-label="Filtrar tickets">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="filtro-estado">Estado</label>
+            <select id="filtro-estado" name="estado">
+              <option value="">Todos</option>
+              <option value="abierto">Abierto</option>
+              <option value="en-proceso">En proceso</option>
+              <option value="resuelto">Resuelto</option>
+              <option value="cerrado">Cerrado</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtro-categoria">Categoría</label>
+            <select id="filtro-categoria" name="categoria">
+              <option value="">Todas</option>
+              <option value="hardware">Hardware</option>
+              <option value="red">Red</option>
+              <option value="software">Software</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtro-prioridad">Prioridad</label>
+            <select id="filtro-prioridad" name="prioridad">
+              <option value="">Todas</option>
+              <option value="critica">Crítica</option>
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex:1;">
+            <label for="filtro-busqueda">Buscar</label>
+            <input type="search" id="filtro-busqueda" name="busqueda"
+                   placeholder="Buscar por título, técnico o número..."
+                   maxlength="100">
+          </div>
+          <div class="filter-actions">
+            <button type="submit" class="btn btn-primary btn-sm">🔍 Filtrar</button>
+            <button type="reset" class="btn btn-ghost btn-sm">Limpiar</button>
+          </div>
+        </div>
+      </form>
 
-            <p>
-              <button type="submit">Aplicar filtros</button>
-              <button type="reset">Limpiar filtros</button>
-            </p>
-          </fieldset>
-        </form>
-      </section>
-
-      <section aria-labelledby="tabla-tickets-titulo">
-        <h3 id="tabla-tickets-titulo">Tickets Registrados</h3>
-
-        <table>
-          <caption>
-            Registro completo de tickets de incidentes – Help Desk Data Center
-            <br>
-            <small>Total de tickets: 10 | Última actualización: <time datetime="2026-05-25">25 de mayo de 2026</time></small>
+      <!-- ── TABLA (escritorio) ── -->
+      <div class="table-wrapper mb-6">
+        <table class="table table-striped">
+          <caption class="sr-only">
+            Listado de tickets de incidentes registrados en el sistema Help Desk del Data Center
           </caption>
           <thead>
             <tr>
               <th scope="col">N.° Ticket</th>
-              <th scope="col">Fecha de apertura</th>
+              <th scope="col">Fecha apertura</th>
               <th scope="col">Título del incidente</th>
               <th scope="col">Categoría</th>
               <th scope="col">Prioridad</th>
               <th scope="col">Estado</th>
-              <th scope="col">Técnico asignado</th>
-              <th scope="col">Fecha resolución</th>
+              <th scope="col">Técnico</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th scope="row">
-                <a href="#detalle-TK-001" aria-label="Ver detalle del ticket TK-001">TK-001</a>
+                <a href="#detalle-TK-001" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
+                   aria-label="Ver detalle del ticket TK-001">TK-001</a>
               </th>
-              <td><time datetime="2026-05-20T08:30">20/05/2026 08:30</time></td>
-              <td>Servidor de base de datos no responde en zona A</td>
-              <td>Software – Base de datos</td>
-              <td>Crítica</td>
-              <td>Resuelto</td>
-              <td>Ing. María López</td>
-              <td><time datetime="2026-05-20T11:15">20/05/2026 11:15</time></td>
+              <td><time datetime="2026-07-07T08:30">07/07 08:30</time></td>
+              <td>Servidor BD no responde en zona A</td>
+              <td><span class="badge badge-solid-primary" style="font-size:10px;">Software</span></td>
+              <td><span class="badge badge-danger">Crítica</span></td>
+              <td><span class="badge badge-primary">En proceso</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                  <span style="font-size:var(--font-size-xs);">Ing. M. López</span>
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <a href="#detalle-TK-001" class="btn btn-ghost btn-sm" aria-label="Ver TK-001">👁</a>
+                  <button class="btn btn-ghost btn-sm" type="button" aria-label="Editar TK-001">✏️</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">
-                <a href="#detalle-TK-002" aria-label="Ver detalle del ticket TK-002">TK-002</a>
+                <a href="#detalle-TK-002" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
+                   aria-label="Ver detalle del ticket TK-002">TK-002</a>
               </th>
-              <td><time datetime="2026-05-21T09:00">21/05/2026 09:00</time></td>
-              <td>Pérdida de conectividad en switch de distribución</td>
-              <td>Red – LAN</td>
-              <td>Alta</td>
-              <td>Resuelto</td>
-              <td>Ing. Pedro Suárez</td>
-              <td><time datetime="2026-05-21T12:45">21/05/2026 12:45</time></td>
+              <td><time datetime="2026-07-07T09:00">07/07 09:00</time></td>
+              <td>Pérdida de conectividad SW-DIST-02</td>
+              <td><span class="badge badge-solid-primary" style="font-size:10px;background:var(--color-info);">Red</span></td>
+              <td><span class="badge badge-warning">Alta</span></td>
+              <td><span class="badge badge-gray">Abierto</span></td>
+              <td><span style="font-size:var(--font-size-xs);color:var(--color-gray-500);">Sin asignar</span></td>
+              <td>
+                <div class="flex gap-2">
+                  <a href="#detalle-TK-002" class="btn btn-ghost btn-sm" aria-label="Ver TK-002">👁</a>
+                  <button class="btn btn-primary btn-sm" type="button" aria-label="Asignar TK-002">Asignar</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">
-                <a href="#detalle-TK-003" aria-label="Ver detalle del ticket TK-003">TK-003</a>
+                <a href="#detalle-TK-003" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
+                   aria-label="Ver detalle del ticket TK-003">TK-003</a>
               </th>
-              <td><time datetime="2026-05-22T14:20">22/05/2026 14:20</time></td>
-              <td>Fallo en disco duro RAID del servidor SRV-FILE-02</td>
-              <td>Hardware – Servidor</td>
-              <td>Alta</td>
-              <td>En Proceso</td>
-              <td>Ing. Carlos Reyes</td>
-              <td>—</td>
+              <td><time datetime="2026-07-06T14:20">06/07 14:20</time></td>
+              <td>Fallo disco RAID servidor SRV-FILE-02</td>
+              <td><span class="badge badge-solid-primary" style="font-size:10px;">Hardware</span></td>
+              <td><span class="badge badge-warning">Alta</span></td>
+              <td><span class="badge badge-primary">En proceso</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="avatar avatar-sm avatar-danger" aria-hidden="true">CR</div>
+                  <span style="font-size:var(--font-size-xs);">Ing. C. Reyes</span>
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <a href="#detalle-TK-003" class="btn btn-ghost btn-sm" aria-label="Ver TK-003">👁</a>
+                  <button class="btn btn-ghost btn-sm" type="button" aria-label="Editar TK-003">✏️</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">
-                <a href="#detalle-TK-004" aria-label="Ver detalle del ticket TK-004">TK-004</a>
+                <a href="#" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
+                   aria-label="Ver detalle del ticket TK-004">TK-004</a>
               </th>
-              <td><time datetime="2026-05-22T16:05">22/05/2026 16:05</time></td>
+              <td><time datetime="2026-07-06T16:05">06/07 16:05</time></td>
               <td>Sistema de correo institucional inaccesible</td>
-              <td>Software – Aplicación empresarial</td>
-              <td>Crítica</td>
-              <td>En Proceso</td>
-              <td>Ing. María López</td>
-              <td>—</td>
+              <td><span class="badge badge-solid-primary" style="font-size:10px;">Software</span></td>
+              <td><span class="badge badge-danger">Crítica</span></td>
+              <td><span class="badge badge-primary">En proceso</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                  <span style="font-size:var(--font-size-xs);">Ing. M. López</span>
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <a href="#" class="btn btn-ghost btn-sm">👁</a>
+                  <button class="btn btn-ghost btn-sm" type="button">✏️</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <th scope="row">
-                <a href="#detalle-TK-005" aria-label="Ver detalle del ticket TK-005">TK-005</a>
+                <a href="#" style="font-family:var(--font-mono);font-weight:700;color:var(--color-primary);"
+                   aria-label="Ver detalle del ticket TK-005">TK-005</a>
               </th>
-              <td><time datetime="2026-05-23T07:45">23/05/2026 07:45</time></td>
-              <td>Lentitud extrema en acceso a carpetas compartidas</td>
-              <td>Red – LAN</td>
-              <td>Media</td>
-              <td>En Proceso</td>
-              <td>Ing. Pedro Suárez</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#detalle-TK-006" aria-label="Ver detalle del ticket TK-006">TK-006</a>
-              </th>
-              <td><time datetime="2026-05-23T10:30">23/05/2026 10:30</time></td>
-              <td>Error al iniciar sesión en sistema ERP</td>
-              <td>Software – Sistema Operativo</td>
-              <td>Alta</td>
-              <td>Abierto</td>
-              <td>Sin asignar</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#detalle-TK-007" aria-label="Ver detalle del ticket TK-007">TK-007</a>
-              </th>
-              <td><time datetime="2026-05-24T08:00">24/05/2026 08:00</time></td>
-              <td>Fuente de poder del servidor SRV-APP-01 con fallo intermitente</td>
-              <td>Hardware – Servidor</td>
-              <td>Alta</td>
-              <td>Abierto</td>
-              <td>Sin asignar</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#detalle-TK-008" aria-label="Ver detalle del ticket TK-008">TK-008</a>
-              </th>
-              <td><time datetime="2026-05-24T11:15">24/05/2026 11:15</time></td>
-              <td>VPN corporativa no permite conexión desde trabajo remoto</td>
-              <td>Red – VPN</td>
-              <td>Media</td>
-              <td>Abierto</td>
-              <td>Sin asignar</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#detalle-TK-009" aria-label="Ver detalle del ticket TK-009">TK-009</a>
-              </th>
-              <td><time datetime="2026-05-25T07:30">25/05/2026 07:30</time></td>
-              <td>Impresora de red del laboratorio 3 sin conexión</td>
-              <td>Hardware – Periférico</td>
-              <td>Baja</td>
-              <td>Abierto</td>
-              <td>Sin asignar</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th scope="row">
-                <a href="#detalle-TK-010" aria-label="Ver detalle del ticket TK-010">TK-010</a>
-              </th>
-              <td><time datetime="2026-05-25T09:00">25/05/2026 09:00</time></td>
-              <td>Actualización fallida del antivirus en equipos de administración</td>
-              <td>Software – Seguridad</td>
-              <td>Media</td>
-              <td>Abierto</td>
-              <td>Sin asignar</td>
-              <td>—</td>
+              <td><time datetime="2026-07-06T11:15">06/07 11:15</time></td>
+              <td>VPN corporativa sin conexión remota</td>
+              <td><span class="badge badge-solid-primary" style="font-size:10px;background:var(--color-info);">Red</span></td>
+              <td><span class="badge badge-primary">Media</span></td>
+              <td><span class="badge badge-success">Resuelto</span></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="avatar avatar-sm" style="background:var(--color-info);" aria-hidden="true">PS</div>
+                  <span style="font-size:var(--font-size-xs);">Ing. P. Suárez</span>
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <a href="#" class="btn btn-ghost btn-sm">👁</a>
+                  <button class="btn btn-success btn-sm" type="button">✓ Cerrar</button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- ── VISTA CARDS (móvil) ── -->
+      <div class="tickets-card-view" aria-label="Lista de tickets en vista móvil">
+
+        <article class="ticket-card" aria-label="Ticket TK-001">
+          <div class="ticket-priority-bar critica" aria-label="Prioridad crítica"></div>
+          <div class="ticket-content">
+            <div class="ticket-id">TK-001 · <time datetime="2026-07-07T08:30">07/07 08:30</time></div>
+            <div class="ticket-title">Servidor BD no responde en zona A</div>
+            <div class="ticket-meta">
+              <span class="badge badge-danger">Crítica</span>
+              <span class="badge badge-primary">En proceso</span>
+              <span>Ing. M. López</span>
+            </div>
+            <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);">
+              <a href="#detalle-TK-001" class="btn btn-outline btn-sm">Ver detalle</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="ticket-card" aria-label="Ticket TK-002">
+          <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+          <div class="ticket-content">
+            <div class="ticket-id">TK-002 · <time datetime="2026-07-07T09:00">07/07 09:00</time></div>
+            <div class="ticket-title">Pérdida de conectividad SW-DIST-02</div>
+            <div class="ticket-meta">
+              <span class="badge badge-warning">Alta</span>
+              <span class="badge badge-gray">Abierto</span>
+              <span style="color:var(--color-gray-500);">Sin asignar</span>
+            </div>
+            <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);">
+              <a href="#detalle-TK-002" class="btn btn-outline btn-sm">Ver detalle</a>
+              <button class="btn btn-primary btn-sm" type="button">Asignar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="ticket-card" aria-label="Ticket TK-003">
+          <div class="ticket-priority-bar alta" aria-label="Prioridad alta"></div>
+          <div class="ticket-content">
+            <div class="ticket-id">TK-003 · <time datetime="2026-07-06T14:20">06/07 14:20</time></div>
+            <div class="ticket-title">Fallo disco RAID servidor SRV-FILE-02</div>
+            <div class="ticket-meta">
+              <span class="badge badge-warning">Alta</span>
+              <span class="badge badge-primary">En proceso</span>
+              <span>Ing. C. Reyes</span>
+            </div>
+            <div style="margin-top:var(--space-3);">
+              <a href="#detalle-TK-003" class="btn btn-outline btn-sm">Ver detalle</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="ticket-card" aria-label="Ticket TK-005 resuelto">
+          <div class="ticket-priority-bar baja" aria-label="Prioridad baja"></div>
+          <div class="ticket-content">
+            <div class="ticket-id">TK-005 · <time datetime="2026-07-06T11:15">06/07 11:15</time></div>
+            <div class="ticket-title">VPN corporativa sin conexión remota</div>
+            <div class="ticket-meta">
+              <span class="badge badge-primary">Media</span>
+              <span class="badge badge-success">Resuelto</span>
+              <span>Ing. P. Suárez</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ── DETALLE DE TICKETS ── -->
+      <section aria-labelledby="detalles-titulo">
+        <h2 id="detalles-titulo" style="font-size:var(--font-size-xl);color:var(--color-dark);margin-bottom:var(--space-4);">
+          Detalle de Tickets
+        </h2>
+
+        <!-- TK-001 -->
+        <article id="detalle-TK-001" class="ticket-detail mb-6" aria-labelledby="titulo-TK-001">
+          <div class="ticket-detail-header">
+            <div>
+              <p class="ticket-detail-id">TK-001</p>
+              <h3 id="titulo-TK-001">Servidor de base de datos no responde en zona A</h3>
+              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+                <span class="badge badge-danger">Crítica</span>
+                <span class="badge badge-primary">En proceso</span>
+                <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Software – BD</span>
+              </div>
+            </div>
+            <a href="#" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
+              Actualizar estado
+            </a>
+          </div>
+          <div class="ticket-detail-body">
+            <div class="detail-field">
+              <span class="detail-label">Número de ticket</span>
+              <span class="detail-value mono">TK-001</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Fecha de apertura</span>
+              <span class="detail-value">
+                <time datetime="2026-07-07T08:30">07 de julio de 2026, 08:30</time>
+              </span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Técnico asignado</span>
+              <div class="flex items-center gap-2" style="margin-top:var(--space-1);">
+                <div class="avatar avatar-sm avatar-success" aria-hidden="true">ML</div>
+                <span class="detail-value">Ing. María López – Especialista en BD</span>
+              </div>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Servidor afectado</span>
+              <span class="detail-value mono">SRV-DB-01</span>
+            </div>
+            <div class="detail-field detail-desc">
+              <span class="detail-label">Descripción del problema</span>
+              <span class="detail-value">
+                El servidor SRV-DB-01 dejó de responder consultas a las 08:25.
+                Los servicios de MySQL y PostgreSQL no inician.
+                El error en log indica corrupción de tablespace en la partición principal.
+              </span>
+            </div>
+            <div class="detail-field detail-desc">
+              <span class="detail-label">Solución en progreso</span>
+              <span class="detail-value">
+                Se inició recuperación de tablespace corrupto mediante respaldo de las 03:00 AM.
+                Se reiniciaron los servicios de base de datos. Validación de integridad en curso.
+              </span>
+            </div>
+          </div>
+          <div class="card-footer" style="justify-content:space-between;">
+            <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
+            <div class="flex gap-2">
+              <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
+              <button class="btn btn-success btn-sm" type="button">✓ Marcar como resuelto</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- TK-002 -->
+        <article id="detalle-TK-002" class="ticket-detail mb-6" aria-labelledby="titulo-TK-002">
+          <div class="ticket-detail-header" style="background:linear-gradient(135deg,#7F4400,var(--color-secondary));">
+            <div>
+              <p class="ticket-detail-id">TK-002</p>
+              <h3 id="titulo-TK-002">Pérdida de conectividad en switch de distribución SW-DIST-02</h3>
+              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+                <span class="badge badge-warning">Alta</span>
+                <span class="badge badge-gray">Abierto – Sin asignar</span>
+                <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Red – LAN</span>
+              </div>
+            </div>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);" type="button">
+              Asignar técnico
+            </button>
+          </div>
+          <div class="ticket-detail-body">
+            <div class="detail-field">
+              <span class="detail-label">Número de ticket</span>
+              <span class="detail-value mono">TK-002</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Fecha de apertura</span>
+              <span class="detail-value">
+                <time datetime="2026-07-07T09:00">07 de julio de 2026, 09:00</time>
+              </span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Técnico asignado</span>
+              <span class="detail-value" style="color:var(--color-gray-500);">Sin asignar — pendiente</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Equipo afectado</span>
+              <span class="detail-value mono">SW-DIST-02 (Piso 2)</span>
+            </div>
+            <div class="detail-field detail-desc">
+              <span class="detail-label">Descripción del problema</span>
+              <span class="detail-value">
+                El switch de distribución SW-DIST-02 perdió conectividad con los switches de acceso
+                en el piso 2, dejando sin red a 35 estaciones de trabajo del área administrativa.
+                El equipo no responde a ping desde la red de gestión.
+              </span>
+            </div>
+          </div>
+          <div class="card-footer" style="justify-content:space-between;">
+            <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
+            <div class="flex gap-2">
+              <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
+              <button class="btn btn-primary btn-sm" type="button">Asignar técnico</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- TK-003 -->
+        <article id="detalle-TK-003" class="ticket-detail" aria-labelledby="titulo-TK-003">
+          <div class="ticket-detail-header" style="background:linear-gradient(135deg,var(--color-dark),var(--color-primary));">
+            <div>
+              <p class="ticket-detail-id">TK-003</p>
+              <h3 id="titulo-TK-003">Fallo en disco duro RAID del servidor SRV-FILE-02</h3>
+              <div class="flex gap-2 flex-wrap" style="margin-top:var(--space-2);">
+                <span class="badge badge-warning">Alta</span>
+                <span class="badge badge-primary">En proceso</span>
+                <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);">Hardware – Servidor</span>
+              </div>
+            </div>
+            <a href="#" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
+              Actualizar estado
+            </a>
+          </div>
+          <div class="ticket-detail-body">
+            <div class="detail-field">
+              <span class="detail-label">Número de ticket</span>
+              <span class="detail-value mono">TK-003</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Fecha de apertura</span>
+              <span class="detail-value">
+                <time datetime="2026-07-06T14:20">06 de julio de 2026, 14:20</time>
+              </span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Técnico asignado</span>
+              <div class="flex items-center gap-2" style="margin-top:var(--space-1);">
+                <div class="avatar avatar-sm avatar-danger" aria-hidden="true">CR</div>
+                <span class="detail-value">Ing. Carlos Reyes – Especialista en Hardware</span>
+              </div>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Servidor afectado</span>
+              <span class="detail-value mono">SRV-FILE-02 (Ranura 3)</span>
+            </div>
+            <div class="detail-field detail-desc">
+              <span class="detail-label">Descripción del problema</span>
+              <span class="detail-value">
+                El servidor de archivos SRV-FILE-02 reporta degradación del arreglo RAID-5.
+                Un disco en la ranura 3 fue marcado como fallido por el controlador.
+                Los datos están aún accesibles pero en modo degradado, con riesgo de pérdida.
+              </span>
+            </div>
+            <div class="detail-field detail-desc">
+              <span class="detail-label">Avance actual</span>
+              <span class="detail-value">
+                Se solicitó disco de reemplazo al proveedor. Se realizó respaldo completo
+                como medida preventiva. Se espera entrega del disco para proceder con
+                la reconstrucción del arreglo RAID.
+              </span>
+            </div>
+          </div>
+          <div class="card-footer" style="justify-content:space-between;">
+            <a href="#" class="btn btn-ghost btn-sm">← Volver al listado</a>
+            <div class="flex gap-2">
+              <button class="btn btn-outline btn-sm" type="button">Agregar nota</button>
+              <button class="btn btn-success btn-sm" type="button">✓ Marcar como resuelto</button>
+            </div>
+          </div>
+        </article>
+
       </section>
-    </section>
 
-    <section aria-labelledby="detalles-titulo">
-      <h2 id="detalles-titulo">Detalle de Tickets</h2>
+    </main>
+  </div>
 
-      <article id="detalle-TK-001" aria-labelledby="titulo-TK-001">
-        <h3 id="titulo-TK-001">TK-001 – Servidor de base de datos no responde en zona A</h3>
-        <dl>
-          <dt>Número de ticket</dt>
-          <dd>TK-001</dd>
-          <dt>Fecha de apertura</dt>
-          <dd><time datetime="2026-05-20T08:30">20 de mayo de 2026, 08:30</time></dd>
-          <dt>Categoría</dt>
-          <dd>Software – Base de datos</dd>
-          <dt>Prioridad</dt>
-          <dd>Crítica</dd>
-          <dt>Estado actual</dt>
-          <dd>Resuelto</dd>
-          <dt>Solicitante</dt>
-          <dd>Administrador de Sistemas – Zona A</dd>
-          <dt>Técnico asignado</dt>
-          <dd>Ing. María López – Especialista en Bases de Datos</dd>
-          <dt>Descripción del problema</dt>
-          <dd>El servidor SRV-DB-01 dejó de responder consultas a las 08:25. Los servicios de MySQL y PostgreSQL no inician. El error en log indica corrupción de tablespace.</dd>
-          <dt>Solución aplicada</dt>
-          <dd>Se realizó recuperación de tablespace corrupto mediante respaldo de las 03:00 AM. Se reiniciaron los servicios de base de datos. Se validó integridad de datos con el administrador.</dd>
-          <dt>Fecha de resolución</dt>
-          <dd><time datetime="2026-05-20T11:15">20 de mayo de 2026, 11:15</time></dd>
-          <dt>Tiempo de resolución</dt>
-          <dd>2 horas 45 minutos</dd>
-        </dl>
-        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
-      </article>
-
-      <article id="detalle-TK-002" aria-labelledby="titulo-TK-002">
-        <h3 id="titulo-TK-002">TK-002 – Pérdida de conectividad en switch de distribución</h3>
-        <dl>
-          <dt>Número de ticket</dt>
-          <dd>TK-002</dd>
-          <dt>Fecha de apertura</dt>
-          <dd><time datetime="2026-05-21T09:00">21 de mayo de 2026, 09:00</time></dd>
-          <dt>Categoría</dt>
-          <dd>Red – LAN</dd>
-          <dt>Prioridad</dt>
-          <dd>Alta</dd>
-          <dt>Estado actual</dt>
-          <dd>Resuelto</dd>
-          <dt>Solicitante</dt>
-          <dd>Ing. Roberto Vera – Soporte Nivel 1</dd>
-          <dt>Técnico asignado</dt>
-          <dd>Ing. Pedro Suárez – Especialista en Redes</dd>
-          <dt>Descripción del problema</dt>
-          <dd>El switch de distribución SW-DIST-02 perdió conectividad con los switches de acceso en el piso 2, dejando sin red a 35 estaciones de trabajo.</dd>
-          <dt>Solución aplicada</dt>
-          <dd>Se identificó puerto SFP+ con fallo en módulo óptico. Se reemplazó el módulo y se restauraron las conexiones troncales. Se verificó la convergencia del protocolo STP.</dd>
-          <dt>Fecha de resolución</dt>
-          <dd><time datetime="2026-05-21T12:45">21 de mayo de 2026, 12:45</time></dd>
-          <dt>Tiempo de resolución</dt>
-          <dd>3 horas 45 minutos</dd>
-        </dl>
-        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
-      </article>
-
-      <article id="detalle-TK-003" aria-labelledby="titulo-TK-003">
-        <h3 id="titulo-TK-003">TK-003 – Fallo en disco duro RAID del servidor SRV-FILE-02</h3>
-        <dl>
-          <dt>Número de ticket</dt>
-          <dd>TK-003</dd>
-          <dt>Fecha de apertura</dt>
-          <dd><time datetime="2026-05-22T14:20">22 de mayo de 2026, 14:20</time></dd>
-          <dt>Categoría</dt>
-          <dd>Hardware – Servidor</dd>
-          <dt>Prioridad</dt>
-          <dd>Alta</dd>
-          <dt>Estado actual</dt>
-          <dd>En Proceso</dd>
-          <dt>Técnico asignado</dt>
-          <dd>Ing. Carlos Reyes – Especialista en Hardware</dd>
-          <dt>Descripción del problema</dt>
-          <dd>El servidor de archivos SRV-FILE-02 reporta degradación del arreglo RAID-5. Un disco en ranura 3 fue marcado como fallido por el controlador. Los datos están aún accesibles pero en modo degradado.</dd>
-          <dt>Avance actual</dt>
-          <dd>Se solicitó disco de reemplazo al proveedor. Se realizó respaldo completo como medida preventiva. Se espera entrega del disco el 26/05/2026 para proceder con la reconstrucción del arreglo.</dd>
-        </dl>
-        <p><a href="#tickets-titulo">&#8593; Volver al listado de tickets</a></p>
-      </article>
-
-    </section>
-
-    <section aria-labelledby="resumen-titulo">
-      <h2 id="resumen-titulo">Resumen por Estado y Prioridad</h2>
-      <table>
-        <caption>Resumen estadístico de tickets por prioridad y estado</caption>
-        <thead>
-          <tr>
-            <th scope="col">Prioridad</th>
-            <th scope="col">Abiertos</th>
-            <th scope="col">En Proceso</th>
-            <th scope="col">Resueltos</th>
-            <th scope="col">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Crítica</th>
-            <td>0</td>
-            <td>1</td>
-            <td>1</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <th scope="row">Alta</th>
-            <td>2</td>
-            <td>1</td>
-            <td>1</td>
-            <td>4</td>
-          </tr>
-          <tr>
-            <th scope="row">Media</th>
-            <td>2</td>
-            <td>1</td>
-            <td>0</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <th scope="row">Baja</th>
-            <td>1</td>
-            <td>0</td>
-            <td>0</td>
-            <td>1</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th scope="row">Total</th>
-            <td>5</td>
-            <td>3</td>
-            <td>2</td>
-            <td>10</td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-
-  </main>
-
-  <aside aria-labelledby="acciones-titulo">
-    <h2 id="acciones-titulo">Acciones Rápidas</h2>
-    <ul>
-      <li><a href="reportar.html">Reportar nuevo incidente</a></li>
-      <li><a href="index.html">Volver al panel principal</a></li>
-    </ul>
-
-    <h3>Técnicos Disponibles</h3>
-    <ul>
-      <li><strong>Ing. María López</strong> – Software / Bases de datos</li>
-      <li><strong>Ing. Pedro Suárez</strong> – Redes y conectividad</li>
-      <li><strong>Ing. Carlos Reyes</strong> – Hardware y servidores</li>
-    </ul>
-  </aside>
-
-  <footer>
-    <p>
-      <small>
-        Sistema Help Desk – Data Center &copy; 2026 |
-        Universidad Técnica de Manabí |
-        Desarrollo de Sistemas Informáticos – Unidad 2
-      </small>
-    </p>
-    <p>
-      <small>
-        Proyecto desarrollado por: <strong>Carlos Andrés Mejía Torres</strong> |
-        Repositorio:
-        <a href="https://github.com/wloor9692/helpdesk-datacenter" target="_blank" rel="noopener noreferrer">
-          github.com/wloor9692/helpdesk-datacenter
-        </a>
-      </small>
-    </p>
-    <nav aria-label="Navegación de pie de página">
-      <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="reportar.html">Reportar Incidente</a></li>
-        <li><a href="tickets.html">Lista de Tickets</a></li>
-      </ul>
-    </nav>
+  <!-- FOOTER -->
+  <footer style="background-color:var(--color-dark);color:rgba(255,255,255,.7);
+                 padding:var(--space-6) 0;border-top:3px solid var(--color-secondary);">
+    <div class="container">
+      <div class="flex justify-between flex-wrap gap-4">
+        <p style="font-size:var(--font-size-sm);margin:0;">
+          Help Desk – Data Center &copy; 2026 | Universidad Técnica de Manabí
+        </p>
+        <p style="font-size:var(--font-size-sm);margin:0;">
+          Autor: <strong style="color:#fff;">Walter Alejandro Loor García</strong> |
+          <a href="https://github.com/wloor9692/helpdesk-datacenter"
+             style="color:var(--color-secondary);"
+             target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
+      </div>
+    </div>
   </footer>
 
 </body>
