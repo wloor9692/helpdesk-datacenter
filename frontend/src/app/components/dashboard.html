@@ -1,0 +1,77 @@
+<section class="page">
+
+  <!-- Encabezado -->
+  <div class="page-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p class="text-muted">Panel de control – Sistema Help Desk Data Center</p>
+    </div>
+    <a routerLink="/reportar" class="btn btn-secondary">➕ Nuevo Ticket</a>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-box">
+    <p>Cargando datos desde la API...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="alert alert-danger">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <!-- KPIs -->
+  <div *ngIf="!loading" class="kpi-grid">
+    <div class="card-stat card-primary">
+      <span class="stat-label">Total Tickets</span>
+      <span class="stat-value">{{ getTotal() }}</span>
+      <span class="stat-meta">En el sistema</span>
+    </div>
+    <div class="card-stat card-danger">
+      <span class="stat-label">Críticos</span>
+      <span class="stat-value text-danger">{{ getCantidadPorPrioridad('critica') }}</span>
+      <span class="stat-meta">Atención inmediata</span>
+    </div>
+    <div class="card-stat card-warning">
+      <span class="stat-label">En Proceso</span>
+      <span class="stat-value text-warning">{{ getCantidadPorEstado('en-proceso') }}</span>
+      <span class="stat-meta">Asignados</span>
+    </div>
+    <div class="card-stat card-success">
+      <span class="stat-label">Resueltos</span>
+      <span class="stat-value text-success">{{ getCantidadPorEstado('resuelto') }}</span>
+      <span class="stat-meta">Completados</span>
+    </div>
+  </div>
+
+  <!-- Tickets recientes -->
+  <div *ngIf="!loading" class="card mt-6">
+    <div class="card-header">
+      <h3>Tickets Recientes</h3>
+      <a routerLink="/tickets" class="btn btn-ghost btn-sm">Ver todos →</a>
+    </div>
+    <div class="card-body p-0">
+      <div *ngFor="let ticket of ticketsRecientes" class="ticket-card">
+        <div class="ticket-bar" [class]="'bar-' + ticket.prioridad"></div>
+        <div class="ticket-info">
+          <div class="ticket-top">
+            <span class="ticket-codigo">{{ ticket.codigo }}</span>
+            <span class="badge" [class]="getBadgeClass(ticket.prioridad)">{{ ticket.prioridad }}</span>
+            <span class="badge" [class]="getEstadoBadge(ticket.estado)">{{ ticket.estado }}</span>
+          </div>
+          <p class="ticket-titulo">{{ ticket.titulo }}</p>
+          <p class="ticket-meta">
+            👤 {{ ticket.solicitante?.nombre }} &nbsp;·&nbsp;
+            📁 {{ ticket.categoria }} &nbsp;·&nbsp;
+            🕐 {{ ticket.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="ticketsRecientes.length === 0" class="empty-state">
+        <p>No hay tickets registrados aún.</p>
+        <a routerLink="/reportar" class="btn btn-primary">Crear primer ticket</a>
+      </div>
+    </div>
+  </div>
+
+</section>

@@ -1,0 +1,106 @@
+<section class="page">
+
+  <div class="page-header">
+    <div>
+      <h2>Tickets</h2>
+      <p class="text-muted">{{ total }} tickets registrados en el sistema</p>
+    </div>
+    <a routerLink="/reportar" class="btn btn-primary">➕ Nuevo Ticket</a>
+  </div>
+
+  <!-- Mensaje de éxito -->
+  <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
+  <div *ngIf="error"   class="alert alert-danger">{{ error }}</div>
+
+  <!-- Filtros -->
+  <div class="filter-bar">
+    <div class="fg">
+      <label>Estado</label>
+      <select [(ngModel)]="filtroEstado">
+        <option value="">Todos</option>
+        <option value="abierto">Abierto</option>
+        <option value="en-proceso">En proceso</option>
+        <option value="resuelto">Resuelto</option>
+        <option value="cerrado">Cerrado</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Prioridad</label>
+      <select [(ngModel)]="filtroPrioridad">
+        <option value="">Todas</option>
+        <option value="critica">Crítica</option>
+        <option value="alta">Alta</option>
+        <option value="media">Media</option>
+        <option value="baja">Baja</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Categoría</label>
+      <select [(ngModel)]="filtroCategoria">
+        <option value="">Todas</option>
+        <option value="hardware-servidor">Hardware – Servidor</option>
+        <option value="hardware-almacenamiento">Hardware – Almacenamiento</option>
+        <option value="red-lan">Red – LAN</option>
+        <option value="red-vpn">Red – VPN</option>
+        <option value="software-bd">Software – BD</option>
+        <option value="software-aplicacion">Software – Aplicación</option>
+      </select>
+    </div>
+    <div class="fg fg-search">
+      <label>Buscar</label>
+      <input type="search" [(ngModel)]="filtroBusqueda" placeholder="Título, código...">
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary btn-sm" (click)="aplicarFiltros()">🔍 Filtrar</button>
+      <button class="btn btn-ghost btn-sm"   (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-box"><p>Cargando tickets...</p></div>
+
+  <!-- Lista de tickets -->
+  <div *ngIf="!loading">
+    <div *ngFor="let ticket of tickets" class="ticket-card">
+      <div class="ticket-bar" [class]="'bar-' + ticket.prioridad"></div>
+      <div class="ticket-info flex-1">
+        <div class="ticket-top">
+          <span class="ticket-codigo">{{ ticket.codigo }}</span>
+          <span class="badge" [class]="getBadgeClass(ticket.prioridad)">{{ ticket.prioridad }}</span>
+          <span class="badge" [class]="getEstadoBadge(ticket.estado)">{{ ticket.estado }}</span>
+        </div>
+        <p class="ticket-titulo">{{ ticket.titulo }}</p>
+        <p class="ticket-meta">
+          👤 {{ ticket.solicitante?.nombre }} &nbsp;·&nbsp;
+          📁 {{ ticket.categoria }} &nbsp;·&nbsp;
+          🕐 {{ ticket.createdAt | date:'dd/MM/yyyy' }}
+          <span *ngIf="ticket.tecnicoAsignado?.nombre">
+            &nbsp;·&nbsp; 🧑‍💻 {{ ticket.tecnicoAsignado.nombre }}
+          </span>
+        </p>
+      </div>
+      <div class="ticket-actions">
+        <select class="estado-select" [value]="ticket.estado"
+                (change)="cambiarEstado(ticket, $any($event.target).value)">
+          <option value="abierto">Abierto</option>
+          <option value="en-proceso">En proceso</option>
+          <option value="resuelto">Resuelto</option>
+          <option value="cerrado">Cerrado</option>
+        </select>
+        <button class="btn btn-danger btn-sm" (click)="eliminarTicket(ticket)">🗑</button>
+      </div>
+    </div>
+
+    <div *ngIf="tickets.length === 0" class="empty-state">
+      <p>No se encontraron tickets con los filtros aplicados.</p>
+    </div>
+
+    <!-- Paginación -->
+    <div *ngIf="totalPaginas > 1" class="pagination">
+      <button class="btn btn-ghost btn-sm" [disabled]="pagina === 1" (click)="anteriorPagina()">← Anterior</button>
+      <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+      <button class="btn btn-ghost btn-sm" [disabled]="pagina === totalPaginas" (click)="siguientePagina()">Siguiente →</button>
+    </div>
+  </div>
+
+</section>

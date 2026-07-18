@@ -1,0 +1,134 @@
+<section class="page">
+
+  <div class="page-header">
+    <div>
+      <h2>Reportar Incidente</h2>
+      <p class="text-muted">Complete el formulario para registrar un nuevo ticket</p>
+    </div>
+    <a routerLink="/tickets" class="btn btn-ghost">← Ver Tickets</a>
+  </div>
+
+  <!-- Éxito -->
+  <div *ngIf="exito" class="card success-card">
+    <div class="success-icon">✅</div>
+    <h3>¡Ticket creado exitosamente!</h3>
+    <p>Tu incidente fue registrado con el código:</p>
+    <div class="ticket-codigo-display">{{ ticketCreado?.codigo }}</div>
+    <p class="text-muted">Recibirás notificación cuando sea asignado a un técnico.</p>
+    <div class="success-actions">
+      <button class="btn btn-primary" (click)="nuevo()">➕ Reportar otro incidente</button>
+      <a routerLink="/tickets" class="btn btn-outline">Ver todos los tickets</a>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="!exito" class="card">
+    <div class="card-header">
+      <h3>Datos del Incidente</h3>
+    </div>
+    <div class="card-body">
+
+      <div *ngIf="error" class="alert alert-danger mb-4">{{ error }}</div>
+
+      <!-- Solicitante -->
+      <h4 class="form-section-title">1. Datos del Solicitante</h4>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Nombre completo <span class="required">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="ticket.solicitante.nombre"
+                 placeholder="Ej. Walter Loor" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo institucional <span class="required">*</span></label>
+          <input type="email" class="form-control" [(ngModel)]="ticket.solicitante.correo"
+                 placeholder="usuario@utm.edu.ec" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teléfono</label>
+          <input type="tel" class="form-control" [(ngModel)]="ticket.solicitante.telefono"
+                 placeholder="Ej. 0991234567">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Departamento</label>
+          <input type="text" class="form-control" [(ngModel)]="ticket.solicitante.departamento"
+                 placeholder="Ej. Infraestructura TI">
+        </div>
+      </div>
+
+      <!-- Incidente -->
+      <h4 class="form-section-title">2. Detalles del Incidente</h4>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Categoría <span class="required">*</span></label>
+          <select class="form-control" [(ngModel)]="ticket.categoria" required>
+            <option value="">-- Seleccione --</option>
+            <optgroup label="Hardware">
+              <option value="hardware-servidor">Hardware – Servidor</option>
+              <option value="hardware-almacenamiento">Hardware – Almacenamiento</option>
+              <option value="hardware-periferico">Hardware – Periférico</option>
+            </optgroup>
+            <optgroup label="Red">
+              <option value="red-lan">Red – LAN</option>
+              <option value="red-wan">Red – WAN</option>
+              <option value="red-vpn">Red – VPN</option>
+            </optgroup>
+            <optgroup label="Software">
+              <option value="software-so">Software – SO</option>
+              <option value="software-bd">Software – Base de datos</option>
+              <option value="software-aplicacion">Software – Aplicación</option>
+              <option value="software-seguridad">Software – Seguridad</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prioridad <span class="required">*</span></label>
+          <select class="form-control" [(ngModel)]="ticket.prioridad" required>
+            <option value="critica">🔴 Crítica – Servicio caído</option>
+            <option value="alta">🟠 Alta – Impacto significativo</option>
+            <option value="media">🟡 Media – Parcialmente afectado</option>
+            <option value="baja">🟢 Baja – Inconveniente menor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Título del incidente <span class="required">*</span></label>
+        <input type="text" class="form-control" [(ngModel)]="ticket.titulo"
+               placeholder="Ej. Servidor de base de datos no responde en zona A" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descripción detallada <span class="required">*</span></label>
+        <textarea class="form-control" [(ngModel)]="ticket.descripcion" rows="5"
+                  placeholder="Describa el problema con detalle: qué ocurrió, cuándo comenzó, servicios afectados..."
+                  required minlength="20"></textarea>
+      </div>
+
+      <!-- Equipo afectado -->
+      <h4 class="form-section-title">3. Equipo Afectado (opcional)</h4>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Nombre del equipo</label>
+          <input type="text" class="form-control" [(ngModel)]="ticket.equipoAfectado.nombre"
+                 placeholder="Ej. SRV-DB-01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Dirección IP</label>
+          <input type="text" class="form-control" [(ngModel)]="ticket.equipoAfectado.ip"
+                 placeholder="Ej. 192.168.1.100">
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" (click)="limpiar()">Limpiar</button>
+        <button type="button" class="btn btn-primary btn-lg"
+                (click)="enviar()" [disabled]="enviando">
+          {{ enviando ? 'Enviando...' : '📨 Enviar Reporte' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</section>
